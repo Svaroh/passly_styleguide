@@ -91,7 +91,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY:
         return this.translate("Account Recovery");
       case AdministrationWorkspaceMenuTypes.SMTP_SETTINGS:
-        return this.translate("Email Server");
+        return this.translate("Email server");
       case AdministrationWorkspaceMenuTypes.SELF_REGISTRATION:
         return this.translate("Self Registration");
       case AdministrationWorkspaceMenuTypes.SSO:
@@ -109,23 +109,21 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.HEALTHCHECK:
         return this.translate("Passbolt API Status");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA:
-        return this.translate("Encrypted Metadata");
+        return this.translate("Encrypted metadata");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY:
-        return this.translate("Metadata Key");
+        return this.translate("Metadata key");
       case AdministrationWorkspaceMenuTypes.MIGRATE_METADATA:
-        return this.translate("Migrate Metadata");
+        return this.translate("Migrate metadata");
       case AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES:
-        return this.translate("Allow Content Types");
+        return this.translate("Allow content types");
       case AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED:
-        return this.translate("Getting Started");
+        return this.translate("Getting started");
       case AdministrationWorkspaceMenuTypes.SCIM:
         return this.translate("SCIM");
       case AdministrationWorkspaceMenuTypes.SECRET_HISTORY:
-        return this.translate("Secret History");
+        return this.translate("Secret history");
       case AdministrationWorkspaceMenuTypes.CE_DOWNGRADE:
         return this.translate("Downgrade");
-      case AdministrationWorkspaceMenuTypes.OFFLINE:
-        return this.translate("Offline Mode");
       default:
         return "";
     }

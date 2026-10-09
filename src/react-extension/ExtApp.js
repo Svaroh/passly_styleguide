@@ -36,6 +36,7 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
 import ExtAppContextProvider from "./contexts/ExtAppContext";
+
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import UserSettingsContextProvider from "./contexts/UserSettingsContext";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
@@ -72,7 +73,6 @@ import AdministrationEncryptedMetadataGettingStartedContextProvider from "./cont
 import GettingStartedWithEncryptedMetadataServiceWorkerService from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 import { ResizableSidebarContextProvider } from "./contexts/ResizeSidebar/ResizeSidebarContext";
 import SecretRevisionsSettingsContextProvider from "../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
-import OfflineSettingsLocalStorageContextProvider from "../shared/context/offline/OfflineSettingsLocalStorageContext";
 import RoleContextProvider from "./contexts/RoleContext";
 import ExportPoliciesSettingsContextProvider from "./contexts/ExportPoliciesSettingsContext";
 
@@ -131,15 +131,7 @@ class ExtApp extends Component {
                                             <Switch>
                                               {/* The application first load route points to an html document */}
                                               <Route
-                                                path={[
-                                                  "/webAccessibleResources/passbolt-iframe-app.html",
-                                                  /*
-                                                   * The workspace served by the extension itself, used when the API
-                                                   * cannot serve its own page. It is the same application, reached
-                                                   * through a different document, so it boots the same way.
-                                                   */
-                                                  "/webAccessibleResources/workspace.html",
-                                                ]}
+                                                path="/webAccessibleResources/passbolt-iframe-app.html"
                                                 component={HandleApplicationFirstLoadRoute}
                                               />
                                               {/* The following routes are not handled by the browser extension application. */}
@@ -164,32 +156,30 @@ class ExtApp extends Component {
                                               >
                                                 <PasswordExpirySettingsContextProvider>
                                                   <ExportPoliciesSettingsContextProvider>
-                                                    <OfflineSettingsLocalStorageContextProvider>
+                                                    <ResourceWorkspaceContextProvider>
                                                       <MetadataTypesSettingsLocalStorageContextProvider>
                                                         <MetadataKeysSettingsLocalStorageContextProvider>
                                                           <ResourceTypesLocalStorageContextProvider>
-                                                            <ResourceWorkspaceContextProvider>
-                                                              <SecretRevisionsSettingsContextProvider>
-                                                                <ResourcePasswordGeneratorContextProvider>
-                                                                  <ManageDialogs />
-                                                                  <ManageWorkflows />
-                                                                  <ManageContextualMenu />
-                                                                  <DragContextProvider>
-                                                                    <ResizableSidebarContextProvider>
-                                                                      <div id="container" className="page password">
-                                                                        <div id="app" className="app" tabIndex="1000">
-                                                                          <DisplayResourcesWorkspace />
-                                                                        </div>
+                                                            <SecretRevisionsSettingsContextProvider>
+                                                              <ResourcePasswordGeneratorContextProvider>
+                                                                <ManageDialogs />
+                                                                <ManageWorkflows />
+                                                                <ManageContextualMenu />
+                                                                <DragContextProvider>
+                                                                  <ResizableSidebarContextProvider>
+                                                                    <div id="container" className="page password">
+                                                                      <div id="app" className="app" tabIndex="1000">
+                                                                        <DisplayResourcesWorkspace />
                                                                       </div>
-                                                                    </ResizableSidebarContextProvider>
-                                                                  </DragContextProvider>
-                                                                </ResourcePasswordGeneratorContextProvider>
-                                                              </SecretRevisionsSettingsContextProvider>
-                                                            </ResourceWorkspaceContextProvider>
+                                                                    </div>
+                                                                  </ResizableSidebarContextProvider>
+                                                                </DragContextProvider>
+                                                              </ResourcePasswordGeneratorContextProvider>
+                                                            </SecretRevisionsSettingsContextProvider>
                                                           </ResourceTypesLocalStorageContextProvider>
                                                         </MetadataKeysSettingsLocalStorageContextProvider>
                                                       </MetadataTypesSettingsLocalStorageContextProvider>
-                                                    </OfflineSettingsLocalStorageContextProvider>
+                                                    </ResourceWorkspaceContextProvider>
                                                   </ExportPoliciesSettingsContextProvider>
                                                 </PasswordExpirySettingsContextProvider>
                                               </Route>
@@ -258,7 +248,6 @@ class ExtApp extends Component {
                                                   "/app/administration/user-provisionning/scim",
                                                   "/app/administration/secret-history",
                                                   "/app/administration/ce-downgrade",
-                                                  "/app/administration/offline",
                                                 ]}
                                               >
                                                 <AdministrationWorkspaceContextProvider>

@@ -42,7 +42,7 @@ const scenarios = [
   },
   {
     field: "userDirectory",
-    title: "Users Directory",
+    title: "Users directory",
     proRedirect: "onGoToAdministrationUsersDirectoryRequested",
     ceRedirect: "onGoToAdministrationUsersDirectoryRequestedTeasing",
     checkProIcon: true,
@@ -50,7 +50,7 @@ const scenarios = [
   },
   {
     field: "passwordPolicySettings",
-    title: "Password Policy",
+    title: "Password policy",
     proRedirect: "onGoToAdministrationPasswordPoliciesRequested",
     ceRedirect: "onGoToAdministrationPasswordPoliciesRequestedTeasing",
     checkProIcon: true,
@@ -58,7 +58,7 @@ const scenarios = [
   },
   {
     field: "userPassphrasePolicies",
-    title: "User Passphrase Policies",
+    title: "User passphrase policies",
     proRedirect: "onGoToAdministrationUserPassphrasePoliciesRequested",
     ceRedirect: "onGoToAdministrationUserPassphrasePoliciesRequestedTeasing",
     checkProIcon: true,
@@ -66,7 +66,7 @@ const scenarios = [
   },
   {
     field: "emailNotifications",
-    title: "Email Notifications",
+    title: "Email notifications",
     proRedirect: "onGoToAdministrationEmailNotificationsRequested",
     clickMethod: "goToEmailNotifications",
   },
@@ -84,7 +84,7 @@ const scenarios = [
   },
   {
     field: "accountRecovery",
-    title: "Account Recovery",
+    title: "Account recovery",
     proRedirect: "onGoToAdministrationAccountRecoveryRequested",
     ceRedirect: "onGoToAdministrationAccountRecoveryRequestedTeasing",
     checkProIcon: true,
@@ -92,31 +92,31 @@ const scenarios = [
   },
   {
     field: "selfRegistration",
-    title: "Self Registration",
+    title: "Self registration",
     proRedirect: "onGoToAdministrationSelfRegistrationRequested",
     clickMethod: "goToSelfRegistration",
   },
   {
     field: "passwordExpirySettings",
-    title: "Password Expiry",
+    title: "Password expiry",
     proRedirect: "onGoToAdministrationPasswordExpirySettingsRequested",
     clickMethod: "goToPasswordExpirySettings",
   },
   {
     field: "contentTypesEncryptedMetadata",
-    title: "Encrypted Metadata",
+    title: "Encrypted metadata",
     proRedirect: "onGoToAdministrationContentTypesEncryptedMetadataRequested",
     clickMethod: "gotoContentTypesEncryptedMetadata",
   },
   {
     field: "contentTypesMetadataKey",
-    title: "Metadata Key",
+    title: "Metadata key",
     proRedirect: "onGoToAdministrationContentTypesMetadataKeyRequested",
     clickMethod: "gotoContentTypesMetadataKey",
   },
   {
     field: "migrateMetadata",
-    title: "Migrate Metadata",
+    title: "Migrate metadata",
     proRedirect: "onGoToAdministrationMigrateMetadataRequested",
     clickMethod: "gotoMigrateMetadata",
   },
@@ -130,7 +130,7 @@ const scenarios = [
   },
   {
     field: "smtpSettings",
-    title: "Email Server",
+    title: "Email server",
     proRedirect: "onGoToAdministrationSmtpSettingsRequested",
     clickMethod: "goToSmtpSettings",
   },
@@ -144,15 +144,9 @@ const scenarios = [
   },
   {
     field: "secretHistorySettings",
-    title: "Secret History",
+    title: "Secret history",
     proRedirect: "onGoToAdministrationSecretHistoryRequested",
     clickMethod: "goToSecretHistorySettings",
-  },
-  {
-    field: "offlineSettings",
-    title: "Offline mode",
-    proRedirect: "onGoToAdministrationOfflineRequested",
-    clickMethod: "goToOfflineSettings",
   },
 ];
 

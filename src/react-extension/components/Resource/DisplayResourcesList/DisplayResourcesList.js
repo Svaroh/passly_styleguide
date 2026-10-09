@@ -24,9 +24,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withDrag } from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
-import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
-import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
 import CellUris from "../../../../shared/components/Table/CellUris";
@@ -55,10 +53,8 @@ import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
 import ColumnLocationModel from "../../../../shared/models/column/ColumnLocationModel";
 import ColumnTagsModel from "../../../../shared/models/column/ColumnTagsModel";
-import ColumnOfflineModel from "../../../../shared/models/column/ColumnOfflineModel";
 import CellLocation from "../../../../shared/components/Table/CellLocation";
 import CellTag from "../../../../shared/components/Table/CellTag";
-import CellOffline from "../../../../shared/components/Table/CellOffline";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { RESOURCE_TYPE_VERSION_5 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -135,7 +131,6 @@ class DisplayResourcesList extends React.Component {
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
     this.isPinCodeResources = this.isPinCodeResources.bind(this);
-    this.isOfflineResourceSupported = this.isOfflineResourceSupported.bind(this);
     this.handleLocationClick = this.handleLocationClick.bind(this);
     this.handleTagClick = this.handleTagClick.bind(this);
   }
@@ -144,7 +139,6 @@ class DisplayResourcesList extends React.Component {
    * Init the grid columns.
    */
   initColumns() {
-    this.defaultColumns = [];
     this.defaultColumns.push(
       new ColumnCheckboxModel({
         cellRenderer: { component: CellCheckbox, props: { onClick: this.handleCheckboxWrapperClick } },
@@ -267,19 +261,6 @@ class DisplayResourcesList extends React.Component {
         }),
       );
     }
-    if (this.canUseOffline) {
-      this.defaultColumns.push(
-        new ColumnOfflineModel({
-          cellRenderer: {
-            component: CellOffline,
-            props: {
-              isSupported: this.isOfflineResourceSupported,
-            },
-          },
-          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Available Offline") } },
-        }),
-      );
-    }
   }
 
   /**
@@ -338,8 +319,8 @@ class DisplayResourcesList extends React.Component {
     const hasColumnsSettingsChanged =
       prevProps.resourceWorkspaceContext.columnsResourceSetting !==
       this.props.resourceWorkspaceContext.columnsResourceSetting;
-    const mustMergeAndSortColumns = hasColumnsSettingsChanged || hasColumnsResourceViewChange;
-    if (mustMergeAndSortColumns && this.columnsResourceSetting !== null) {
+
+    if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
       this.mergeAndSortColumns();
     }
   }
@@ -416,18 +397,6 @@ class DisplayResourcesList extends React.Component {
    */
   get canUseTags() {
     return this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
-  }
-
-  /**
-   * Check if the user can use offline mode.
-   * @returns {boolean}
-   */
-  get canUseOffline() {
-    return (
-      this.props.context.siteSettings.canIUse("offlineMode") &&
-      Boolean(this.props.offlineSettings) &&
-      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
-    );
   }
 
   /**
@@ -1116,19 +1085,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Is offline resource supported
-   * @param resource
-   * @return {boolean}
-   */
-  isOfflineResourceSupported(resource) {
-    const resourceType = this.props.resourceTypes?.getFirstById(resource.resource_type_id);
-    if (!resourceType) {
-      return false;
-    }
-    return resourceType.isV5() && (resourceType.hasPassword() || resourceType.hasTotp());
-  }
-
-  /**
    * Returns true if pin code resource types are available.
    * @returns {boolean}
    */
@@ -1278,19 +1234,6 @@ class DisplayResourcesList extends React.Component {
                 </div>
               </div>
             )}
-            {filterType === ResourceWorkspaceFilterTypes.TRASH && (
-              <div className="empty-content">
-                <CircleOffSVG />
-                <div className="message">
-                  <h1>
-                    <Trans>No passwords in the trash.</Trans>
-                  </h1>
-                  <p>
-                    <Trans>Deleted passwords will appear here until they are restored.</Trans>
-                  </p>
-                </div>
-              </div>
-            )}
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
               filterType === ResourceWorkspaceFilterTypes.ALL) && (
               <div className="empty-content">
@@ -1316,19 +1259,6 @@ class DisplayResourcesList extends React.Component {
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password.</Trans>
-                  </p>
-                </div>
-              </div>
-            )}
-            {filterType === ResourceWorkspaceFilterTypes.OFFLINE && (
-              <div className="empty-content">
-                <CircleOffSVG />
-                <div className="message">
-                  <h1>
-                    <Trans>No passwords are offline available yet.</Trans>
-                  </h1>
-                  <p>
-                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
                   </p>
                 </div>
               </div>
@@ -1359,7 +1289,6 @@ class DisplayResourcesList extends React.Component {
 DisplayResourcesList.propTypes = {
   context: PropTypes.any, // The app context
   rbacContext: PropTypes.any, // The role based access control context
-  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   resourceWorkspaceContext: PropTypes.any,
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
@@ -1375,13 +1304,11 @@ export default withAppContext(
   withClipboard(
     withRouter(
       withRbac(
-        withOfflineSettingsLocalStorage(
-          withActionFeedback(
-            withContextualMenu(
-              withResourceWorkspace(
-                withResourceTypesLocalStorage(
-                  withPasswordExpiry(withDrag(withProgress(withTranslation("common")(DisplayResourcesList)))),
-                ),
+        withActionFeedback(
+          withContextualMenu(
+            withResourceWorkspace(
+              withResourceTypesLocalStorage(
+                withPasswordExpiry(withDrag(withProgress(withTranslation("common")(DisplayResourcesList)))),
               ),
             ),
           ),

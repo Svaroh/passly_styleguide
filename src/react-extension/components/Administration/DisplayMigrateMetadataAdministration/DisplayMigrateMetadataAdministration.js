@@ -380,7 +380,7 @@ class DisplayMigrateMetadataAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <label>
-                  <Trans>Migrate Metadata</Trans>
+                  <Trans>Migrate metadata</Trans>
                 </label>
               </h3>
               <p className="description">
@@ -450,7 +450,7 @@ class DisplayMigrateMetadataAdministration extends Component {
               </div>
 
               <h4>
-                <Trans>Items To Migrate</Trans>
+                <Trans>Items to migrate</Trans>
               </h4>
               <div className="togglelist">
                 <span
@@ -564,7 +564,7 @@ class DisplayMigrateMetadataAdministration extends Component {
               </div>
 
               <h4>
-                <Trans>Migration Scope</Trans>
+                <Trans>Migration scope</Trans>
               </h4>
               <div className="radiolist-alt">
                 <div

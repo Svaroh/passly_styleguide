@@ -142,7 +142,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.goToSmtpSettings();
       expect(page.smtpSettings).toBeTruthy();
-      expect(page.menuSelected).toBe("Email Server");
+      expect(page.menuSelected).toBe("Email server");
       expect(props.navigationContext.onGoToAdministrationSmtpSettingsRequested).toHaveBeenCalled();
     });
 
@@ -356,7 +356,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoContentTypesEncryptedMetadata();
       expect(page.contentTypesEncryptedMetadata).toBeTruthy();
-      expect(page.menuSelected).toBe("Encrypted Metadata");
+      expect(page.menuSelected).toBe("Encrypted metadata");
       expect(props.navigationContext.onGoToAdministrationContentTypesEncryptedMetadataRequested).toHaveBeenCalled();
     });
 
@@ -391,7 +391,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoContentTypesMetadataKey();
       expect(page.contentTypesMetadataKey).toBeTruthy();
-      expect(page.menuSelected).toBe("Metadata Key");
+      expect(page.menuSelected).toBe("Metadata key");
       expect(props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested).toHaveBeenCalled();
     });
 
@@ -424,7 +424,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoMigrateMetadata();
       expect(page.contentTypesMetadataKey).toBeTruthy();
-      expect(page.menuSelected).toBe("Migrate Metadata");
+      expect(page.menuSelected).toBe("Migrate metadata");
       expect(props.navigationContext.onGoToAdministrationMigrateMetadataRequested).toHaveBeenCalled();
     });
 
@@ -457,7 +457,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoContentTypesMetadataKey();
       expect(page.contentTypesMetadataKey).toBeTruthy();
-      expect(page.menuSelected).toBe("Allow Content Types");
+      expect(page.menuSelected).toBe("Allow content types");
       expect(props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested).toHaveBeenCalled();
     });
 
@@ -495,7 +495,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoMetadataGettingStartedSettings();
       expect(page.metadataGettingStartedSettings).toBeTruthy();
-      expect(page.menuSelected).toBe("Getting Started");
+      expect(page.menuSelected).toBe("Getting started");
       expect(props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested).toHaveBeenCalled();
     });
 
@@ -781,33 +781,6 @@ describe("As AD I can see the administration menu", () => {
     });
   });
 
-  describe("As a signed-in administrator on the administration workspace, I can see the offline mode option in the left-side bar", () => {
-    it("If the feature flag is true, the menu should be visible", async () => {
-      expect.assertions(4);
-      const props = defaultProps({
-        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
-      }); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag === "offlineMode");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoOfflineSettings();
-      expect(page.offlineSettings).toBeTruthy();
-      expect(page.menuSelected).toBe("Offline mode");
-      expect(props.navigationContext.onGoToAdministrationOfflineRequested).toHaveBeenCalled();
-    });
-
-    it("If the feature flag is false, the menu should not be visible", async () => {
-      expect.assertions(2);
-      const props = defaultProps({
-        administrationWorkspaceContext: { selectedAdministration: AdministrationWorkspaceMenuTypes.OFFLINE },
-      }); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((flag) => flag !== "offlineMode");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      expect(page.offlineSettings).toBeNull();
-    });
-  });
-
   describe("As a signed-in administrator on the administration workspace, I can see the secret history option in the left-side bar", () => {
     it("If the feature flag is true, the menu should be visible", async () => {
       expect.assertions(4);
@@ -818,7 +791,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.gotoSecretHistorySettings();
       expect(page.secretHistorySettings).toBeTruthy();
-      expect(page.menuSelected).toBe("Secret History");
+      expect(page.menuSelected).toBe("Secret history");
       expect(props.navigationContext.onGoToAdministrationSecretHistoryRequested).toHaveBeenCalled();
     });
 

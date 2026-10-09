@@ -40,29 +40,6 @@ class HandleApplicationFirstLoadRoute extends Component {
   }
 
   /**
-   * Get the action from the url parameter.
-   * @returns {string} If the action does not validate return an empty string.
-   */
-  getActionFromUrlParameter() {
-    const action = new URLSearchParams(this.props.location.search).get("action");
-
-    if (!this.validateAction(action)) {
-      return "";
-    }
-
-    return action;
-  }
-
-  /**
-   * Validate an action.
-   * @param {string|null} action The action to test
-   * @returns {boolean}
-   */
-  validateAction(action) {
-    return action === "edit";
-  }
-
-  /**
    * Validate a pathname.
    * A valid pathname contains only alphabetical, numerical, / and - characters
    * @param {string} pathname The pathname to test
@@ -85,24 +62,11 @@ class HandleApplicationFirstLoadRoute extends Component {
   }
 
   /**
-   * The first search query to redirect to.
-   * @returns {string}
-   */
-  get searchToRedirectTo() {
-    const action = this.getActionFromUrlParameter();
-    if (!action) {
-      return "";
-    }
-
-    return `?action=${action}`;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
   render() {
-    return <Redirect to={{ pathname: this.pathnameToRedirectTo, search: this.searchToRedirectTo }} />;
+    return <Redirect to={this.pathnameToRedirectTo} />;
   }
 }
 

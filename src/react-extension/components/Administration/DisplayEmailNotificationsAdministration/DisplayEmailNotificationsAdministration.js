@@ -173,7 +173,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
         <div className="email-notification-settings main-column">
           <div className="main-content">
             <h3 className="title">
-              <Trans>Email Delivery</Trans>
+              <Trans>Email delivery</Trans>
             </h3>
             <div className="divider" />
             <p>
@@ -331,7 +331,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
             <div className="section">
               <div className="group-section">
                 <label>
-                  <Trans>Group Membership</Trans>
+                  <Trans>Group membership</Trans>
                 </label>
                 <span className="input toggle-switch form-element">
                   <input
@@ -392,7 +392,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               </div>
               <div className="group-admin-section">
                 <label>
-                  <Trans>Group Manager</Trans>
+                  <Trans>Group manager</Trans>
                 </label>
                 <span className="input toggle-switch form-element">
                   <input
@@ -527,7 +527,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
             {this.canUseAccountRecovery() && (
               <>
                 <h3 className="title">
-                  <Trans>Account Recovery</Trans>
+                  <Trans>Account recovery</Trans>
                 </h3>
                 <div className="divider" />
                 <div className="section">
@@ -650,7 +650,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
             {this.canUsePasswordExpiry() && (
               <>
                 <h3 className="title">
-                  <Trans>Password Expiry</Trans>
+                  <Trans>Password expiry</Trans>
                 </h3>
                 <div className="divider" />
                 <div className="section">
@@ -676,7 +676,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               </>
             )}
             <h3 className="title">
-              <Trans>Email Content Visibility</Trans>
+              <Trans>Email content visibility</Trans>
             </h3>
             <div className="divider" />
             <p>

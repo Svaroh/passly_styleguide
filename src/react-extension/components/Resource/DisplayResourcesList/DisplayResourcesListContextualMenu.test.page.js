@@ -100,14 +100,6 @@ export default class DisplayResourcesListContextualMenuPage {
    * Returns the item.
    * @return {HTMLElement}
    */
-  get restoreItem() {
-    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#restore");
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
   get shareItem() {
     return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#share");
   }
@@ -142,14 +134,6 @@ export default class DisplayResourcesListContextualMenuPage {
    */
   get secretHistoryItem() {
     return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#secret-history");
-  }
-
-  /**
-   * Returns the offline availability item.
-   * @return {HTMLElement}
-   */
-  get offlineAvailabilityItem() {
-    return this.menu.querySelector("li .row .main-cell-wrapper .main-cell button#offline-availability");
   }
 
   /** Click on the component */
@@ -202,13 +186,6 @@ export default class DisplayResourcesListContextualMenuPage {
   }
 
   /**
-   * Click on the menu restore resource
-   */
-  async restore() {
-    await this.click(this.restoreItem);
-  }
-
-  /**
    * Click on the menu edit folder
    */
   async edit() {
@@ -248,12 +225,5 @@ export default class DisplayResourcesListContextualMenuPage {
    */
   async displaySecretHistory() {
     await this.click(this.secretHistoryItem);
-  }
-
-  /**
-   * Click on the menu offline availability
-   */
-  async toggleOfflineAvailability() {
-    await this.click(this.offlineAvailabilityItem);
   }
 }

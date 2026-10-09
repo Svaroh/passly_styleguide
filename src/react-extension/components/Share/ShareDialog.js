@@ -885,7 +885,7 @@ class ShareDialog extends Component {
                   minSize={this.props.listMinSize}
                   type={displayedPermissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
-                  getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
+                  usePosition={true}
                   threshold={30}
                 ></ReactList>
               )}
@@ -917,6 +917,11 @@ class ShareDialog extends Component {
                 {!operatorOwnershipIsInvalid && hasNoOwner && (
                   <div className="message error">
                     <Trans>Please make sure there is at least one owner.</Trans>
+                  </div>
+                )}
+                {this.hasChanges() && !hasNoOwner && !operatorOwnershipIsInvalid && (
+                  <div className="message warning">
+                    <Trans>Click save to apply your pending changes.</Trans>
                   </div>
                 )}
               </>

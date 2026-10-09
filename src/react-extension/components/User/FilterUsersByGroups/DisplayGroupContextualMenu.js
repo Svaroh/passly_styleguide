@@ -24,7 +24,6 @@ import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
 import EditSVG from "../../../../img/svg/edit.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
-import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -33,7 +32,6 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -59,7 +57,7 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   async handleDeleteClickEvent() {
     try {
-      await this.groupServiceWorkerService.deleteDryRun(this.group.id);
+      await this.props.context.port.request("passbolt.groups.delete-dry-run", this.group.id);
       this.displayDeleteGroupDialog();
     } catch (error) {
       if (error.name === "DeleteDryRunError") {

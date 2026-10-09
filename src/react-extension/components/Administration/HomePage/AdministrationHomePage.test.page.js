@@ -70,14 +70,14 @@ export default class AdministrationHomePagePage {
    * Returns the user directory menu
    */
   get userDirectory() {
-    return this._page.container.querySelector('button.card span.title[title="Users Directory"]');
+    return this._page.container.querySelector('button.card span.title[title="Users directory"]');
   }
 
   /**
    * Returns the email notifications menu
    */
   get emailNotifications() {
-    return this._page.container.querySelector('button.card span.title[title="Email Notifications"]');
+    return this._page.container.querySelector('button.card span.title[title="Email notifications"]');
   }
 
   /**
@@ -105,21 +105,21 @@ export default class AdministrationHomePagePage {
    * Returns the account recovery menu
    */
   get accountRecovery() {
-    return this._page.container.querySelector('button.card span.title[title="Account Recovery"]');
+    return this._page.container.querySelector('button.card span.title[title="Account recovery"]');
   }
 
   /**
    * Returns the account recovery menu
    */
   get smtpSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Email Server"]');
+    return this._page.container.querySelector('button.card span.title[title="Email server"]');
   }
 
   /**
    * Returns the self registration menu
    */
   get selfRegistration() {
-    return this._page.container.querySelector('button.card span.title[title="Self Registration"]');
+    return this._page.container.querySelector('button.card span.title[title="Self registration"]');
   }
 
   /**
@@ -133,49 +133,49 @@ export default class AdministrationHomePagePage {
    * Returns the User Passphrase Policies menu
    */
   get userPassphrasePolicies() {
-    return this._page.container.querySelector('button.card span.title[title="User Passphrase Policies"]');
+    return this._page.container.querySelector('button.card span.title[title="User passphrase policies"]');
   }
 
   /**
    * Returns the Password Expiry menu
    */
   get passwordExpirySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Password Expiry"]');
+    return this._page.container.querySelector('button.card span.title[title="Password expiry"]');
   }
 
   /**
    * Returns the Password Policy menu
    */
   get passwordPolicySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Password Policy"]');
+    return this._page.container.querySelector('button.card span.title[title="Password policy"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
-    return this._page.container.querySelector('button.card span.title[title="Encrypted Metadata"]');
+    return this._page.container.querySelector('button.card span.title[title="Encrypted metadata"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesMetadataKey() {
-    return this._page.container.querySelector('button.card span.title[title="Metadata Key"]');
+    return this._page.container.querySelector('button.card span.title[title="Metadata key"]');
   }
 
   /**
    * Returns the Content Types Encrypted Metadata.
    */
   get migrateMetadata() {
-    return this._page.container.querySelector('button.card span.title[title="Migrate Metadata"]');
+    return this._page.container.querySelector('button.card span.title[title="Migrate metadata"]');
   }
 
   /**
    * Returns the Metadata Getting Started Settings.
    */
   get metadataGettingStartedSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Getting Started"]');
+    return this._page.container.querySelector('button.card span.title[title="Getting started"]');
   }
 
   get scimSettings() {
@@ -186,14 +186,7 @@ export default class AdministrationHomePagePage {
    * Returns the secret history settings.
    */
   get secretHistorySettings() {
-    return this._page.container.querySelector('button.card span.title[title="Secret History"]');
-  }
-
-  /**
-   * Returns the offline mode settings.
-   */
-  get offlineSettings() {
-    return this._page.container.querySelector('button.card span.title[title="Offline mode"]');
+    return this._page.container.querySelector('button.card span.title[title="Secret history"]');
   }
 
   /**
@@ -271,11 +264,6 @@ export default class AdministrationHomePagePage {
   /** Click on the secret history settings element */
   async goToSecretHistorySettings() {
     await this.click(this.secretHistorySettings);
-  }
-
-  /** Click on the offline mode settings element */
-  async goToOfflineSettings() {
-    await this.click(this.offlineSettings);
   }
 
   /** Click on the SSO settings element */

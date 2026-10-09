@@ -194,12 +194,6 @@ class FilterResourcesByFolders extends React.Component {
       for (const [key, value] of Object.entries(foldersByParent)) {
         // Get the index of the folder parent id
         const folderParentIndex = foldersToDisplay.findIndex((folder) => folder.id === key);
-        // Skip an orphaned group whose parent is not displayed (a stale descendant left
-        // opened after a collapse). Root folders (parent id null) are intentionally
-        // inserted at the top, so they are not treated as orphans
-        if (folderParentIndex === -1 && key !== `${ROOT}`) {
-          continue;
-        }
         // Sort folders alphabetically
         this.sortFoldersAlphabetically(value);
         // Insert folders into the right position
@@ -298,17 +292,13 @@ class FilterResourcesByFolders extends React.Component {
    * @param folderId
    */
   handleToggleCloseFolder(folderId) {
-    const isSelfOrDescendant = (id) => {
-      let currentId = id;
-      while (currentId) {
-        if (currentId === folderId) {
-          return true;
-        }
-        currentId = this.props.context.foldersMapById[currentId]?.folder_parent_id;
+    const foldersToClose = [folderId];
+    this.props.context.folders.forEach((folder) => {
+      if (foldersToClose.includes(folder.folder_parent_id)) {
+        foldersToClose.push(folder.id);
       }
-      return false;
-    };
-    const folderIdsOpened = this.state.folderIdsOpened.filter((id) => !isSelfOrDescendant(id));
+    });
+    const folderIdsOpened = this.state.folderIdsOpened.filter((folderId) => !foldersToClose.includes(folderId));
     this.setState({ folderIdsOpened });
   }
 
@@ -598,7 +588,7 @@ class FilterResourcesByFolders extends React.Component {
               pageSize={30}
               minSize={30}
               type="uniform"
-              getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
+              usePosition={true}
               ref={this.folderTreeRef}
             ></ReactList>
           )}

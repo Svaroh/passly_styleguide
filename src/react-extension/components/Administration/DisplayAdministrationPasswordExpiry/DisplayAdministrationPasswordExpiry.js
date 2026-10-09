@@ -113,13 +113,13 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
                 ) : (
                   <div id="password-expiry-settings-form">
                     <h4 id="password-expiry-settings-automatic-workflows" className="title title--required no-border">
-                      <Trans>Automatic Workflows</Trans>
+                      <Trans>Automatic workflows</Trans>
                     </h4>
                     <div className="radiolist-alt">
                       <div className={`input radio`}>
                         <label htmlFor="passwordExpiryAutomaticExpiry">
                           <span className="name">
-                            <Trans>Automatic Expiry</Trans>
+                            <Trans>Automatic expiry</Trans>
                           </span>
                           <span className="info">
                             <Trans>
@@ -132,7 +132,7 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
                       <div className={`input radio`}>
                         <label htmlFor="passwordExpiryAutomatiUpdate">
                           <span className="name">
-                            <Trans>Automatic Update</Trans>
+                            <Trans>Automatic update</Trans>
                           </span>
                           <span className="info">
                             <Trans>Password is no longer marked as expired whenever the password is updated.</Trans>
