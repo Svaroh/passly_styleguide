@@ -35,10 +35,7 @@ import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/model
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {
-  RESOURCE_TYPE_V5_PASSKEY_SLUG,
-  V4_TO_V5_RESOURCE_TYPE_MAPPING,
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import { V4_TO_V5_RESOURCE_TYPE_MAPPING } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 
 class SelectResourceForm extends Component {
@@ -228,14 +225,6 @@ class SelectResourceForm extends Component {
   }
 
   /**
-   * Is resource type passkey
-   * @returns {boolean}
-   */
-  get isResourceTypePasskey() {
-    return this.props.resourceType?.slug === RESOURCE_TYPE_V5_PASSKEY_SLUG;
-  }
-
-  /**
    * Should the 'Metadata' section be displayed
    * @returns {boolean}
    */
@@ -270,12 +259,11 @@ class SelectResourceForm extends Component {
    */
   get canAddSecret() {
     return (
-      !this.isResourceTypePasskey &&
-      (this.canAddSecretPassword ||
-        this.canAddSecretTotp ||
-        this.canAddSecretNote ||
-        this.canAddSecretCustomFields ||
-        this.canAddSecretPinCode)
+      this.canAddSecretPassword ||
+      this.canAddSecretTotp ||
+      this.canAddSecretNote ||
+      this.canAddSecretCustomFields ||
+      this.canAddSecretPinCode
     );
   }
 

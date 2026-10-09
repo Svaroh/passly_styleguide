@@ -20,7 +20,6 @@ import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import { fireEvent, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import DeleteUserGroupWithConflictsPage from "./DeleteUserGroupWithConflicts.test.page";
-import { GROUPS_DELETE } from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 import {
   defaultAppContext,
   defaultProps,
@@ -99,7 +98,7 @@ describe("See Delete Group Dialog", () => {
           { aco_foreign_key: "7ecd7376-8540-58c1-88d9-678c027d464a", id: "e8ffb030-09f5-54cd-ad64-68e3e983a3d4" },
         ],
       };
-      expect(context.port.request).toHaveBeenCalledWith(GROUPS_DELETE, mockGroup.id, permissionTransfer);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.delete", mockGroup.id, permissionTransfer);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -159,7 +158,7 @@ describe("See Delete Group Dialog", () => {
       await page.displayDeleteGroupWithConflictsDialog.click(submitButton);
 
       // Throw general error message
-      await waitFor(() => expect(page.displayDeleteGroupWithConflictsDialog.errorDialog).not.toBeNull());
+      expect(page.displayDeleteGroupWithConflictsDialog.errorDialog).not.toBeNull();
       expect(page.displayDeleteGroupWithConflictsDialog.errorDialogMessage).not.toBeNull();
     });
 

@@ -17,7 +17,6 @@ import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration
 import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import { defaultWorkflowContext } from "../../../contexts/WorkflowContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
-import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import {
   defaultResourceDto,
@@ -35,8 +34,6 @@ import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadat
 import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
-import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
-import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -47,7 +44,6 @@ export function defaultProps(data = {}) {
   return {
     context: defaultUserAppContext(),
     rbacContext: defaultUserRbacContext(),
-    offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
     resource: defaultResourceDto(),
     hide: jest.fn(),
     left: 10,
@@ -90,16 +86,6 @@ export function propsResourceStandaloneTotp() {
  * Props with a selected resource where the user has a read only permission on
  * @returns {object}
  */
-export function propsResourceInTrash() {
-  return {
-    ...defaultProps({
-      resourceWorkspaceContext: defaultResourceWorkspaceContext({
-        filter: { type: ResourceWorkspaceFilterTypes.TRASH },
-      }),
-    }),
-  };
-}
-
 export function propsResourceWithReadOnlyPermission() {
   return {
     ...defaultProps(),

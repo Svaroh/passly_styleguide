@@ -22,7 +22,6 @@ import { withDialog } from "../../../contexts/DialogContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withLoading } from "../../../contexts/LoadingContext";
 import { Trans, withTranslation } from "react-i18next";
-import FolderServiceWorkerService from "../../../../shared/services/serviceWorker/folder/folderServiceWorkerService";
 
 class DeleteResourceFolder extends Component {
   /**
@@ -34,7 +33,6 @@ class DeleteResourceFolder extends Component {
     super(props);
     this.state = this.getStateBasedOnContext(props, this.getDefaultState());
     this.bindEventHandlers();
-    this.folderServiceWorkerService = new FolderServiceWorkerService(props.context.port);
   }
 
   /**
@@ -114,7 +112,11 @@ class DeleteResourceFolder extends Component {
 
     try {
       this.props.loadingContext.add();
-      await this.folderServiceWorkerService.delete(this.props.context.folder.id, this.state.cascade);
+      await this.props.context.port.request(
+        "passbolt.folders.delete",
+        this.props.context.folder.id,
+        this.state.cascade,
+      );
       await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);

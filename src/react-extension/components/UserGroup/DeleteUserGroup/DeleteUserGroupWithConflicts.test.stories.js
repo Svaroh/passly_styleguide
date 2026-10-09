@@ -15,7 +15,7 @@
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import DeleteUserGroupWithConflicts from "./DeleteUserGroupWithConflicts";
-import { mockFolders, mockGroup, mockGroups, mockResources, mockUsers } from "./DeleteUserGroupWithConflicts.test.data";
+import { mockFolders, mockGroups, mockResources, mockUsers } from "./DeleteUserGroupWithConflicts.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 export default {
@@ -34,7 +34,9 @@ const context = {
   users: mockUsers,
   groups: mockGroups,
   deleteGroupWithConflictsDialogProps: {
-    group: mockGroup,
+    group: {
+      id: 1,
+    },
     errors: {
       resources: {
         sole_owner: mockResources,

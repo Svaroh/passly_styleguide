@@ -553,7 +553,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       ) : (
                         <CaretRightSVG className="caret-right" />
                       )}
-                      <Trans>Directory Configuration</Trans>
+                      <Trans>Directory configuration</Trans>
                     </button>
                   </h4>
                   <div className="accordion-content">
@@ -822,7 +822,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       ) : (
                         <CaretRightSVG className="caret-right" />
                       )}
-                      <Trans>Synchronization Options</Trans>
+                      <Trans>Synchronization options</Trans>
                     </button>
                   </h4>
                   <div className="accordion-content">

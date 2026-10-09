@@ -22,10 +22,10 @@ class Logo extends Component {
   render() {
     return (
       <div className="top-bar-left">
-        <div className="logo-svg no-img" title="Passly logo">
+        <div className="logo-svg no-img" title="Passbolt logo">
           <SVGLogo width="15rem" height="2.6rem" role="img" />
           <h1>
-            <span>Passly</span>
+            <span>Passbolt</span>
           </h1>
         </div>
       </div>

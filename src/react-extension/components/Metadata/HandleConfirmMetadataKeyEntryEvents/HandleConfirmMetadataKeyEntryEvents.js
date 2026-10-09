@@ -68,7 +68,7 @@ class HandleConfirmMetadataKeyEntryEvents extends React.Component {
       const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
       this.props.dialogContext.open(ConfirmMetadataKey, { requestId, metadataKey, metadataTrustedKey });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       this.props.dialogContext.open(NotifyError, { error });
     }
   }

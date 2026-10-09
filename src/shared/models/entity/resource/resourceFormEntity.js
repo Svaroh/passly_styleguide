@@ -24,7 +24,6 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_PASSKEY_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   V4_TO_V5_RESOURCE_TYPE_MAPPING,
@@ -45,8 +44,6 @@ import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import { CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH } from "../customField/customFieldEntity";
 import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 import SecretDataV5StandalonePinCodeEntity from "../secretData/secretDataV5StandalonePinCodeEntity";
-import OfflineItemEntity from "../offline/offlineItemEntity";
-import SecretDataV5PasskeyEntity from "../secretData/secretDataV5PasskeyEntity";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -58,13 +55,12 @@ class ResourceFormEntity extends EntityV2 {
 
   /**
    *  @inheritDoc
-   * @returns {{metadata: ResourceMetadataEntity, secret: SecretDataEntity, offline: OfflineItemEntity}}
+   * @returns {{metadata: ResourceMetadataEntity, secret: SecretDataEntity}}
    */
   static get associations() {
     return {
       metadata: ResourceMetadataEntity,
       secret: SecretDataEntity,
-      offline: OfflineItemEntity,
     };
   }
 
@@ -109,12 +105,7 @@ class ResourceFormEntity extends EntityV2 {
             SecretDataV4PasswordStringEntity.getSchema(),
             SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
             SecretDataV5StandalonePinCodeEntity.getSchema(),
-            SecretDataV5PasskeyEntity.getSchema(),
           ],
-        },
-        offline: {
-          ...OfflineItemEntity.getSchema(),
-          nullable: true,
         },
       },
     };
@@ -187,8 +178,6 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV5StandaloneTotpEntity;
       case RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG:
         return SecretDataV5PasswordStringEntity;
-      case RESOURCE_TYPE_V5_PASSKEY_SLUG:
-        return SecretDataV5PasskeyEntity;
       case RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG:
         return SecretDataV4DefaultEntity;
       case RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG:
@@ -414,14 +403,6 @@ class ResourceFormEntity extends EntityV2 {
     return this._secret;
   }
 
-  /**
-   * Get resource form offline
-   * @returns {OfflineItemEntity} offline
-   */
-  get offline() {
-    return this._offline;
-  }
-
   /*
    * ==================================================
    * Serialization
@@ -438,9 +419,6 @@ class ResourceFormEntity extends EntityV2 {
     }
     if (this._secret) {
       result.secret = this.secret.toDto();
-    }
-    if (this._offline) {
-      result.offline = this.offline.toDto();
     }
 
     return result;
@@ -460,11 +438,6 @@ class ResourceFormEntity extends EntityV2 {
         result.metadata.custom_fields = this.secret._customFields.toMetadataDto();
       }
     }
-
-    if (this._offline) {
-      result.offline = this.offline.toDto();
-    }
-
     return result;
   }
 

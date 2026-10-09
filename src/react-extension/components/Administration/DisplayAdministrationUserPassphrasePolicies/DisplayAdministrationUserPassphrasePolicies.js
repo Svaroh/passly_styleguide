@@ -128,7 +128,7 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
             </h3>
             <form>
               <h4 id="user-passphrase-policies-entropy-minimum">
-                <Trans>User Passphrase Minimal Entropy</Trans>
+                <Trans>User passphrase minimal entropy</Trans>
               </h4>
               <div className="input range">
                 <Range

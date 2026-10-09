@@ -718,7 +718,7 @@ class EditUserGroup extends Component {
                       length={this.groupsUsers.length}
                       minSize={4}
                       type={this.groupsUsers.length < 4 ? "simple" : "uniform"}
-                      getListStyle={({ x, y }) => ({ position: "relative", top: y, left: x })}
+                      usePosition={true}
                       threshold={30}
                     ></ReactList>
                   )}

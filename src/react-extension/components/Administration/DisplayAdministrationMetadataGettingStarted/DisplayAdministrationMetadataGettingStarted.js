@@ -151,7 +151,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <label>
-                  <Trans>Getting Started</Trans>
+                  <Trans>Getting started</Trans>
                 </label>
               </h3>
               <p className="description">

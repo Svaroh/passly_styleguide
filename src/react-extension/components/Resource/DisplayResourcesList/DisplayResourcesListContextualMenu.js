@@ -22,16 +22,11 @@ import HandlePermissionWorkflow, {
 import { withWorkflow } from "../../../contexts/WorkflowContext";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import {
-  ResourceWorkspaceFilterTypes,
-  resourceLinkAuthorizedProtocols,
-  withResourceWorkspace,
-} from "../../../contexts/ResourceWorkspaceContext";
+import { resourceLinkAuthorizedProtocols, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 import { Trans, withTranslation } from "react-i18next";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
-import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { withProgress } from "../../../contexts/ProgressContext";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
@@ -52,8 +47,6 @@ import CalendarIcon from "../../../../img/svg/calendar.svg";
 import TotpIcon from "../../../../img/svg/totp.svg";
 import GoIcon from "../../../../img/svg/go.svg";
 import HistoryIcon from "../../../../img/svg/history.svg";
-import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
-import RestoreIcon from "../../../../img/svg/reply.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -62,8 +55,6 @@ import Logger from "../../../../shared/utils/logger";
 import { withSecretRevisionsSettings } from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
-import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
-import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -72,7 +63,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.offlineModeServiceWorkerService = new OfflineModeServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -88,12 +78,10 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
     this.handleTotpClickEvent = this.handleTotpClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
-    this.handleRestoreClickEvent = this.handleRestoreClickEvent.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handleSetExpiryDateClick = this.handleSetExpiryDateClick.bind(this);
     this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
     this.handleSecretHistoryClickEvent = this.handleSecretHistoryClickEvent.bind(this);
-    this.handleOfflineClickEvent = this.handleOfflineClickEvent.bind(this);
   }
 
   /**
@@ -305,30 +293,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleDeleteClickEvent() {
     const resources = [this.resource];
-    this.props.dialogContext.open(DeleteResource, {
-      resources,
-      recoverable: !this.isTrashFilter(),
-    });
+    this.props.dialogContext.open(DeleteResource, { resources });
     this.props.hide();
-  }
-
-  /**
-   * Restore the resource.
-   * @returns {Promise<void>}
-   */
-  async handleRestoreClickEvent() {
-    try {
-      await this.props.context.port.request("passbolt.resources.restore-all", [this.resource.id]);
-      await this.props.actionFeedbackContext.displaySuccess(
-        this.translate("The resource has been restored successfully.", { count: 1 }),
-      );
-      this.props.resourceWorkspaceContext.onResourcesRestored();
-    } catch (error) {
-      Logger.error(error);
-      await this.props.actionFeedbackContext.displayError(error.message);
-    } finally {
-      this.props.hide();
-    }
   }
 
   /**
@@ -372,41 +338,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
-   * Handle the click on the offline menu item to mark or remove the resource from offline availability.
-   * @returns {Promise<void>}
-   */
-  async handleOfflineClickEvent() {
-    const isAvailableOffline = Boolean(this.resource.offline);
-    try {
-      if (isAvailableOffline) {
-        await this.offlineModeServiceWorkerService.unmarkItem(this.resource.offline.id);
-        await this.props.actionFeedbackContext.displaySuccess(
-          this.translate("The resource is no longer available offline."),
-        );
-      } else {
-        await this.offlineModeServiceWorkerService.markResource(this.resource.id);
-        await this.props.actionFeedbackContext.displaySuccess(
-          this.translate("The resource has been made available offline."),
-        );
-      }
-    } catch (error) {
-      Logger.error(error);
-      const maxItemsError = error.data?.body?.max_items;
-      if (maxItemsError) {
-        await this.props.actionFeedbackContext.displayError(
-          this.translate("You have reached the maximum number of offline items (1000)."),
-        );
-      } else {
-        await this.props.actionFeedbackContext.displayError(
-          this.translate("Unable to update the offline availability of the resource."),
-        );
-      }
-    } finally {
-      this.props.hide();
-    }
-  }
-
-  /**
    * Display action aborted
    */
   displayActionAborted() {
@@ -431,17 +362,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
       whiteListedProtocols: resourceLinkAuthorizedProtocols,
       defaultProtocol: urlProtocols.HTTPS,
     });
-  }
-
-  /**
-   * Is the current filter the trash.
-   * @return {boolean}
-   */
-  isTrashFilter() {
-    return (
-      this.props.resourceWorkspaceContext.filter?.type === ResourceWorkspaceFilterTypes.TRASH ||
-      Boolean(this.resource.deleted)
-    );
   }
 
   /**
@@ -563,37 +483,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
-   * Can use offline availability
-   * @return {boolean}
-   */
-  get canUseOffline() {
-    const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
-
-    return (
-      this.props.context.siteSettings.canIUse("offlineMode") &&
-      Boolean(this.props.offlineSettings) &&
-      resourceType?.isV5() &&
-      this.props.rbacContext.canIUseAction(
-        this.resource.offline ? actions.OFFLINE_ITEMS_DELETE : actions.OFFLINE_ITEMS_ADD,
-      )
-    );
-  }
-
-  /**
-   * To check if the resource is a Password or TOTP resource
-   *
-   * This method is to add a conditional check for Offline Mode Phase 1
-   * where the option to mark/unmark a resource as available offline is
-   * only for passwords or TOTP
-   *
-   * @return {boolean}
-   */
-  get isPasswordOrTotp() {
-    const resourceType = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id);
-    return resourceType?.hasPassword() || resourceType?.hasTotp();
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -608,50 +497,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
   render() {
     const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
     const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST);
-
-    if (this.isTrashFilter()) {
-      return (
-        <ContextualMenuWrapper hide={this.props.hide} left={this.props.left} top={this.props.top} className="floating">
-          {this.canUpdate() && (
-            <li key="option-restore-resource" className="ready">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button
-                      type="button"
-                      id="restore"
-                      className="link no-border"
-                      onClick={this.handleRestoreClickEvent}
-                    >
-                      <RestoreIcon />
-                      <span>
-                        <Trans>Restore</Trans>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          )}
-          {this.canUpdate() && (
-            <li key="option-delete-resource" className="ready">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button type="button" id="delete" className="link no-border" onClick={this.handleDeleteClickEvent}>
-                      <DeleteIcon />
-                      <span>
-                        <Trans>Delete</Trans>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          )}
-        </ContextualMenuWrapper>
-      );
-    }
 
     return (
       <ContextualMenuWrapper hide={this.props.hide} left={this.props.left} top={this.props.top} className="floating">
@@ -871,31 +716,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </li>
         )}
-        {this.canUseOffline && this.isPasswordOrTotp && (
-          <li key="option-offline-availability" className="ready">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button
-                    type="button"
-                    id="offline-availability"
-                    className="link no-border"
-                    onClick={this.handleOfflineClickEvent}
-                  >
-                    <OfflineModeSVG />
-                    <span>
-                      {this.resource.offline ? (
-                        <Trans>Remove offline availability</Trans>
-                      ) : (
-                        <Trans>Make available offline</Trans>
-                      )}
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-        )}
         {this.canShare() && (
           <li key="option-delete-resource" className="ready">
             <div className="row">
@@ -920,7 +740,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
 DisplayResourcesListContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
-  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -942,15 +761,13 @@ export default withAppContext(
   withMetadataKeysSettingsLocalStorage(
     withClipboard(
       withRbac(
-        withOfflineSettingsLocalStorage(
-          withResourceWorkspace(
-            withResourceTypesLocalStorage(
-              withPasswordExpiry(
-                withSecretRevisionsSettings(
-                  withDialog(
-                    withWorkflow(
-                      withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
-                    ),
+        withResourceWorkspace(
+          withResourceTypesLocalStorage(
+            withPasswordExpiry(
+              withSecretRevisionsSettings(
+                withDialog(
+                  withWorkflow(
+                    withProgress(withActionFeedback(withTranslation("common")(DisplayResourcesListContextualMenu))),
                   ),
                 ),
               ),

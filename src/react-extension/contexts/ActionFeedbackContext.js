@@ -13,7 +13,6 @@
  */
 
 import * as React from "react";
-import isServerUnreachableError from "../../shared/lib/error/isServerUnreachableError";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -93,15 +92,6 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * @param feedbackToAdd A feedback
    */
   displayError(feedbackToAdd) {
-    /*
-     * Same rule as for dialogs: an unreachable server is a fact about the network, not a failure of the vault, and
-     * it is told once by the offline indicator rather than by an error for every request that could not be made.
-     */
-    if (isServerUnreachableError(feedbackToAdd)) {
-      console.debug("The server could not be reached, not reporting it as an error");
-      return;
-    }
-
     this.setState({
       feedbacks: [
         ...this.state.feedbacks,

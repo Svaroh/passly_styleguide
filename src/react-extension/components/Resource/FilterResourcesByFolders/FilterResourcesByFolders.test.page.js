@@ -33,25 +33,7 @@ export default class FilterResourcesByFoldersPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(this.renderComponent(props));
-    this.setupPageObjects();
-  }
-
-  /**
-   * Re-render the page with new props, keeping the mounted component (and its state)
-   * @param {object} props The new props
-   */
-  rerender(props) {
-    this._page.rerender(this.renderComponent(props));
-  }
-
-  /**
-   * Build the component tree with its providers
-   * @param {object} props The props
-   * @returns {JSX.Element}
-   */
-  renderComponent(props) {
-    return (
+    this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
           <Router>
@@ -70,8 +52,9 @@ export default class FilterResourcesByFoldersPage {
             </ContextualMenuContext.Provider>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
     );
+    this.setupPageObjects();
   }
 
   /**

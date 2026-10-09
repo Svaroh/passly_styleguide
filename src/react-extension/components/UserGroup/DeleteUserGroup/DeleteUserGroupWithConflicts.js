@@ -23,7 +23,6 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import { withLoading } from "../../../contexts/LoadingContext";
 import { Trans, withTranslation } from "react-i18next";
 import Select from "../../Common/Select/Select";
-import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 /**
  * This component allows user to delete a group with conflict to reassign ownership of folders, resources
@@ -40,7 +39,6 @@ class DeleteUserGroupWithConflicts extends Component {
    * Initialize properties
    */
   initializeProperties() {
-    this.groupServiceWorkerService = new GroupServiceWorkerService(this.props.context.port);
     this.foldersErrors = this.getFoldersErrors();
     this.resourcesErrors = this.getResourcesErrors();
     this.acosPermissionsOptions = this.getAcosPermissionsOptionsMap();
@@ -201,7 +199,7 @@ class DeleteUserGroupWithConflicts extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.props.context.setContext({ deleteGroupWithConflictsDialogProps: null });
+    this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
   }
 
   /**
@@ -250,11 +248,11 @@ class DeleteUserGroupWithConflicts extends Component {
     try {
       const groupDeleteTransfer = this.createUserDeleteTransfer();
       this.props.loadingContext.add();
-      await this.groupServiceWorkerService.delete(this.groupToDelete.id, groupDeleteTransfer);
+      await this.props.context.port.request("passbolt.groups.delete", this.groupToDelete.id, groupDeleteTransfer);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();
-      this.props.context.setContext({ deleteGroupWithConflictsDialogProps: null });
+      this.props.context.setContext({ deleteUserWithConflictsDialogProps: null });
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.

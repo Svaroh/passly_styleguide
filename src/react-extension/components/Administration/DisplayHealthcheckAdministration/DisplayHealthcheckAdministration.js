@@ -1564,7 +1564,7 @@ class DisplayHealthcheckAdministration extends Component {
             </div>
 
             <h4>
-              <Trans>Config Files</Trans>
+              <Trans>Config files</Trans>
             </h4>
             <div className="healthcheck-configFiles-section">
               <div>{isAppConfigFilePresent()}</div>
@@ -1572,7 +1572,7 @@ class DisplayHealthcheckAdministration extends Component {
             </div>
 
             <h4>
-              <Trans>Core Config</Trans>
+              <Trans>Core config</Trans>
             </h4>
             <div className="healthcheck-core-section">
               <div>{isDebugDisabled()}</div>
@@ -1623,7 +1623,7 @@ class DisplayHealthcheckAdministration extends Component {
             </div>
 
             <h4>
-              <Trans>Application Configuration</Trans>
+              <Trans>Application configuration</Trans>
             </h4>
             <div className="healthcheck-app-section">
               <div>{isUsingLatestVersion()}</div>

@@ -426,7 +426,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title">
                 <label>
-                  <Trans>Metadata Key</Trans>
+                  <Trans>Metadata key</Trans>
                 </label>
               </h3>
               <p className="description">
@@ -437,7 +437,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
               </p>
 
               <h4 className="no-border">
-                <Trans>Metadata Key Policy</Trans>
+                <Trans>Metadata key policy</Trans>
               </h4>
 
               <p className="description">
@@ -502,7 +502,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
               </div>
 
               <h4>
-                <Trans>Zero Knowledge</Trans>
+                <Trans>Zero knowledge</Trans>
               </h4>
 
               <p className="description">
@@ -564,7 +564,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 </div>
               </div>
               <h4>
-                <Trans>Shared Metadata Keys</Trans>
+                <Trans>Shared metadata keys</Trans>
               </h4>
 
               <div className={`metadata-key-info ${errors?.hasError("generated_metadata_key", "required") && "error"}`}>

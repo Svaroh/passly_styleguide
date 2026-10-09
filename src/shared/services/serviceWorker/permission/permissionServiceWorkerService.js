@@ -13,7 +13,7 @@
  */
 
 import PermissionsCollection from "../../../models/entity/permission/permissionsCollection";
-import { assertArrayUUID, assertUuid } from "../../../utils/assertions";
+import { isValidUuid } from "../../../utils/assertions";
 
 export const PERMISSIONS_FIND_ACO_PERMISSIONS_FOR_DISPLAY = "passbolt.permissions.find-aco-permissions-for-display";
 export const PERMISSIONS_FIND_BY_IDS_FOR_SHARE = "passbolt.permissions.find-by-ids-for-share";
@@ -62,7 +62,9 @@ export default class PermissionServiceWorkerService {
     if (!Array.isArray(resourcesIds) || resourcesIds.length === 0) {
       throw new Error("The given resourcesIds should be a non-empty array.");
     }
-    assertArrayUUID(resourcesIds, "The given resourcesIds should only contain valid UUIDs.");
+    if (!resourcesIds.every((resourceId) => isValidUuid(resourceId))) {
+      throw new Error("The given resourcesIds should only contain valid UUIDs.");
+    }
     return this.port.request(SHARE_RESOURCES_SAVE, resourcesIds, permissionChangesDto);
   }
 
@@ -74,7 +76,9 @@ export default class PermissionServiceWorkerService {
    * @throws {Error} If folderId is not a valid UUID.
    */
   async saveFoldersPermissions(folderId, permissionChangesDto) {
-    assertUuid(folderId, "The given folderId should be a valid UUID.");
+    if (!isValidUuid(folderId)) {
+      throw new Error("The given folderId should be a valid UUID.");
+    }
     return this.port.request(SHARE_FOLDERS_SAVE, folderId, permissionChangesDto);
   }
 
