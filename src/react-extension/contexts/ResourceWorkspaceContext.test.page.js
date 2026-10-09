@@ -202,6 +202,22 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * Go to the Offline search filter route
+   */
+  async goToOffline() {
+    this.setup(this.context, this.props);
+    await this.goToLink(".offline");
+  }
+
+  /**
+   * Go directly to the trash route without relying on router location state.
+   */
+  async goToTrashDirect() {
+    this.setup(this.context, this.props, { initialEntry: "/app/passwords/filter/trash" });
+    await waitForTrue(() => this.filter.type === ResourceWorkspaceFilterTypes.TRASH);
+  }
+
+  /**
    * Select all resources
    */
   selectAll() {
@@ -299,12 +315,7 @@ export default class ResourceWorkspaceContextPage {
       <AppContext.Provider value={context}>
         <Router
           history={createMemoryHistory({
-            initialEntries: [
-              "/app/folders/view/:filterByFolderId",
-              "/app/passwords/view/:selectedResourceId",
-              "/app/passwords/filter/:filterType",
-              "/app/passwords",
-            ],
+            initialEntries: [args.initialEntry || "/app/passwords"],
           })}
         >
           <Switch>
@@ -352,6 +363,14 @@ export default class ResourceWorkspaceContextPage {
             }}
           >
             <a className="expired"></a>
+          </NavLink>
+          <NavLink
+            to={{
+              pathname: "/app/passwords/filter/offline",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.OFFLINE } },
+            }}
+          >
+            <a className="offline"></a>
           </NavLink>
           <NavLink
             to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN } } }}

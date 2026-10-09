@@ -28,8 +28,14 @@ import VenetianMaskSVG from "../../../../img/svg/venetian_mask.svg";
 import CalendarClockSVG from "../../../../img/svg/calendar_clock.svg";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
+import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 import { withRouter } from "react-router-dom";
 import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component allows to filter resources
@@ -53,7 +59,21 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
     this.handlePrivateClick = this.handlePrivateClick.bind(this);
     this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     this.handleResourcesExpiredClick = this.handleResourcesExpiredClick.bind(this);
+    this.handleOfflineClick = this.handleOfflineClick.bind(this);
+    this.handleTrashClick = this.handleTrashClick.bind(this);
     this.handleRemoveFilterClick = this.handleRemoveFilterClick.bind(this);
+  }
+
+  /**
+   * Check if the user can use the offline mode feature.
+   * @returns {boolean}
+   */
+  get canUseOfflineMode() {
+    return (
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
+      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
+    );
   }
 
   /**
@@ -106,6 +126,15 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
             </span>
           </>
         );
+      case ResourceWorkspaceFilterTypes.TRASH:
+        return (
+          <>
+            <DeleteSVG />
+            <span>
+              <Trans>Trash</Trans>
+            </span>
+          </>
+        );
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return (
           <>
@@ -121,6 +150,15 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
             <VenetianMaskSVG />
             <span>
               <Trans>Private</Trans>
+            </span>
+          </>
+        );
+      case ResourceWorkspaceFilterTypes.OFFLINE:
+        return (
+          <>
+            <OfflineModeSVG />
+            <span>
+              <Trans>Available offline</Trans>
             </span>
           </>
         );
@@ -167,6 +205,22 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
   handleResourcesExpiredClick() {
     const filter = { type: ResourceWorkspaceFilterTypes.EXPIRED };
     this.props.history.push({ pathname: "/app/passwords/filter/expired", state: { filter } });
+  }
+
+  /**
+   * Whenever the filter "Offline" has been selected
+   */
+  handleOfflineClick() {
+    const filter = { type: ResourceWorkspaceFilterTypes.OFFLINE };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
+  }
+
+  /**
+   * Whenever the filter "Trash" has been selected
+   */
+  handleTrashClick() {
+    const filter = { type: ResourceWorkspaceFilterTypes.TRASH };
+    this.props.history.push({ pathname: "/app/passwords/filter/trash", state: { filter } });
   }
 
   /**
@@ -236,6 +290,24 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
                   </button>
                 </DropdownMenuItem>
               )}
+              {this.canUseOfflineMode && (
+                <DropdownMenuItem>
+                  <button type="button" className="no-border" onClick={this.handleOfflineClick}>
+                    <OfflineModeSVG />
+                    <span>
+                      <Trans>Available offline</Trans>
+                    </span>
+                  </button>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem>
+                <button type="button" className="no-border" onClick={this.handleTrashClick}>
+                  <DeleteSVG />
+                  <span>
+                    <Trans>Trash</Trans>
+                  </span>
+                </button>
+              </DropdownMenuItem>
             </DropdownMenu>
           </Dropdown>
         )}
@@ -256,6 +328,9 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
 
 DisplayResourcesWorkspaceFilters.propTypes = {
   actionsFilterRef: PropTypes.object, // The forwarded ref of the filters buttons container
+  context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   passwordExpiryContext: PropTypes.object, // the password expiry context
   history: PropTypes.object, // The history property
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
@@ -263,5 +338,11 @@ DisplayResourcesWorkspaceFilters.propTypes = {
 };
 
 export default withRouter(
-  withPasswordExpiry(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceFilters))),
+  withAppContext(
+    withRbac(
+      withOfflineSettingsLocalStorage(
+        withPasswordExpiry(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceFilters))),
+      ),
+    ),
+  ),
 );

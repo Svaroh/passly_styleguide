@@ -47,6 +47,8 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getBreadcrumb(this.translate("Shared with me"))];
       case ResourceWorkspaceFilterTypes.EXPIRED:
         return [...items, this.getBreadcrumb(this.translate("Expired"))];
+      case ResourceWorkspaceFilterTypes.TRASH:
+        return [...items, this.getBreadcrumb(this.translate("Trash"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return [...items, this.getBreadcrumb(this.translate("Items I own"))];
       case ResourceWorkspaceFilterTypes.PRIVATE:
@@ -75,6 +77,9 @@ class FilterResourcesByBreadcrumb extends Component {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
         const currentGroupName = (group && group.name) || this.translate("N/A");
         return [...items, this.getBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
+      }
+      case ResourceWorkspaceFilterTypes.OFFLINE: {
+        return [...items, this.getBreadcrumb(this.translate("Available offline"))];
       }
     }
 
