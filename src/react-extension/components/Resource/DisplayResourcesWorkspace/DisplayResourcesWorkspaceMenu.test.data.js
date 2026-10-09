@@ -17,6 +17,7 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
@@ -38,6 +39,9 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import OfflineSettingsEntity from "../../../../shared/models/entity/offline/offlineSettingsEntity";
+import { defaultOfflineSettingsDto } from "../../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
+import { defaultOfflineItemDto } from "../../../../shared/models/entity/offline/offlineItemEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -63,6 +67,7 @@ export const defaultAppContext = (appContext = {}) => {
 const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
   rbacContext: defaultAdministratorRbacContext(),
+  offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto()),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
   workflowContext: defaultWorkflowContext(),
@@ -129,6 +134,53 @@ export const defaultPropsOneTotpResourceOwned = (data = {}) =>
   });
 
 /**
+ * Default props one selected resource already available offline
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsOneResourceOfflineAvailable = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [defaultResourceDto({ name: "offline-resource", offline: defaultOfflineItemDto() })],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
+/**
+ * Default props one selected v5 resource already available offline
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsOneResourceV5OfflineAvailable = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [
+        defaultResourceDto({
+          name: "offline-resource",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          offline: defaultOfflineItemDto(),
+        }),
+      ],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
+/**
+ * Default props one selected v5 resource of the given resource type
+ * @param {string} resourceTypeId
+ * @param {object} [data = {}]
+ * @returns {{resourceWorkspaceContext}}
+ */
+export const defaultPropsOneResourceV5OfResourceType = (resourceTypeId, data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [defaultResourceDto({ resource_type_id: resourceTypeId })],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
+/**
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */
@@ -145,6 +197,16 @@ export const defaultPropsOneStandaloneTotpResourceOwned = (data = {}) =>
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
+export const defaultPropsOneResourceInTrash = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filter: { type: ResourceWorkspaceFilterTypes.TRASH },
+      selectedResources: [resourcesMock[0]],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+
 export const defaultPropsOneResourceNotOwned = (data = {}) =>
   defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({

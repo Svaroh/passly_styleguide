@@ -91,6 +91,16 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
+  it("As LU I should see a breadcrumb for trash", () => {
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TRASH); // The props to pass
+    page = new FilterResourcesByBreadcrumbPage(context, props);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(2);
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
+    expect(page.displayBreadcrumb.item(2)).toBe("Trash");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
+  });
+
   it("As LU I should see a breadcrumb for resources favorite", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FAVORITE); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
@@ -118,6 +128,16 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Private");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
+  });
+
+  it("As LU I should see a breadcrumb for resources available offline", () => {
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.OFFLINE); // The props to pass
+    page = new FilterResourcesByBreadcrumbPage(context, props);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(2);
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
+    expect(page.displayBreadcrumb.item(2)).toBe("Available offline");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 

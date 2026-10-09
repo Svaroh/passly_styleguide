@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import { MemoryRouter } from "react-router-dom";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 
 /**
@@ -32,10 +33,12 @@ export default class DisplayResourcesWorkspaceMenuPage {
   constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContextProvider context={appContext}>
-          <ManageDialogs />
-          <DisplayResourcesWorkspaceMenu {...props} />
-        </AppContextProvider>
+        <MemoryRouter initialEntries={["/"]}>
+          <AppContextProvider context={appContext}>
+            <ManageDialogs />
+            <DisplayResourcesWorkspaceMenu {...props} />
+          </AppContextProvider>
+        </MemoryRouter>
       </MockTranslationProvider>,
     );
     this.setupPageObjects();
@@ -93,6 +96,14 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the restore menu elements of password workspace menu
+   * @returns {HTMLElement}
+   */
+  get restoreMenu() {
+    return this._container.querySelector("#restore_action button");
+  }
+
+  /**
    * Returns the share menu elements of password workspace menu
    * @returns {HTMLElement}
    */
@@ -146,6 +157,14 @@ class DisplayMenuPageObject {
    */
   get dropdownMenuExport() {
     return this._container.querySelector("#export_action");
+  }
+
+  /**
+   * Returns the offline availability menu element of the more workspace menu
+   * @returns {HTMLElement}
+   */
+  get dropdownMenuOffline() {
+    return this._container.querySelector("#offline_mark_unmark_option");
   }
 
   /**

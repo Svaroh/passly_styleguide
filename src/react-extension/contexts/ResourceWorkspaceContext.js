@@ -25,8 +25,13 @@ import GridResourceUserSettingServiceWorkerService from "../../shared/services/s
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import { withPasswordExpiry } from "./PasswordExpirySettingsContext";
 import { withRbac } from "../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../shared/context/offline/OfflineSettingsLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import { uiActions } from "../../shared/services/rbacs/uiActionEnumeration";
+import { actions } from "../../shared/services/rbacs/actionEnumeration";
 import { ColumnModelTypes } from "../../shared/models/column/ColumnModel";
+import ResourceTypesCollection from "../../shared/models/entity/resourceType/resourceTypesCollection";
+import { RESOURCE_TYPE_VERSION_5 } from "../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import getPropValue from "../lib/Object/getPropValue";
 import { withTranslation } from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
@@ -88,6 +93,8 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
   onResourceFileImportResult: () => {}, // Whenever the import result has been provided
   onResourcesToExport: () => {}, // Whenever resources and/or folder will be exported
+  onResourcesRestored: () => {}, // Whenever resources have been restored
+  onResourcesDeleted: () => {}, // Whenever resources have been deleted
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
   onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
@@ -173,6 +180,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
       onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
+      onResourcesRestored: this.handleResourcesRestored.bind(this), // Whenever resources have been restored
+      onResourcesDeleted: this.handleResourcesDeleted.bind(this), // Whenever resources have been deleted
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
@@ -190,6 +199,14 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Get the resources not marked as deleted.
+   * @return {*}
+   */
+  get activeResources() {
+    return this.resources.filter((resource) => !resource.deleted);
+  }
+
+  /**
    * Get the folders
    * @return {*}
    */
@@ -201,10 +218,39 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.props.passwordExpiryContext.findSettings();
-    this.loadGridResourceSetting();
     this.populate();
     this.handleResourcesWaitedFor();
+    /*
+     * The availability of some columns depends on settings loaded asynchronously. They are all retrieved before
+     * the columns setting is loaded, so the columns are computed once, with everything they depend on known.
+     */
+    await Promise.all([
+      this.waitForOfflineSettings(),
+      this.waitForResourceTypes(),
+      this.props.passwordExpiryContext.findSettings(),
+    ]);
+    this.loadGridResourceSetting();
+  }
+
+  /**
+   * Wait for the resource types to be loaded in the local storage, if they are not already.
+   * @return {Promise<void>}
+   */
+  async waitForResourceTypes() {
+    if (this.props.resourceTypes === null) {
+      await this.props.resourceTypesLocalStorageContext.getOrFind();
+    }
+  }
+
+  /**
+   * Wait for the offline settings to be loaded in the local storage, if they are not already.
+   *
+   * @return {Promise<void>}
+   */
+  async waitForOfflineSettings() {
+    if (this.props.offlineSettingsLocalStorageContext.offlineSettings === undefined) {
+      await this.props.offlineSettingsLocalStorageContext.getOrFind();
+    }
   }
 
   /**
@@ -406,9 +452,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         return { type: ResourceWorkspaceFilterTypes.ALL };
       }
     } else if (this.resources !== null && this.props.location.pathname.includes("passwords")) {
-      const isExpiredResourceLocation = this.props.match.params?.filterType === "expired";
-      if (isExpiredResourceLocation) {
-        return { type: ResourceWorkspaceFilterTypes.EXPIRED };
+      const routeFilterType = {
+        expired: ResourceWorkspaceFilterTypes.EXPIRED,
+        trash: ResourceWorkspaceFilterTypes.TRASH,
+      }[this.props.match.params?.filterType];
+      if (routeFilterType) {
+        return { type: routeFilterType };
       } else if (this.props.match.params.selectedResourceId) {
         // Return ALL if the actual filter is none or the actual filter (fix edge case on first load)
         return filter.type === ResourceWorkspaceFilterTypes.NONE ? { type: ResourceWorkspaceFilterTypes.ALL } : filter;
@@ -812,6 +861,26 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Check if the user can use the offline mode feature.
+   * @returns {boolean}
+   */
+  get canUseOfflineMode() {
+    return (
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
+      this.props.rbacContext.canIUseAction(actions.OFFLINE_ITEMS_VIEW)
+    );
+  }
+
+  /**
+   * Returns true if pin code resource types are available.
+   * @returns {boolean}
+   */
+  get hasPinCodeResourceTypes() {
+    return Boolean(this.props.resourceTypes?.hasSomePinCodeResourceTypes(RESOURCE_TYPE_VERSION_5));
+  }
+
+  /**
    * Populate the context with initial data such as resources and folders
    */
   populate() {
@@ -875,6 +944,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.searchBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.EXPIRED]: this.searchByExpired.bind(this),
+      [ResourceWorkspaceFilterTypes.OFFLINE]: this.searchByOffline.bind(this),
+      [ResourceWorkspaceFilterTypes.TRASH]: this.searchByTrash.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => {
         /* No search */
@@ -889,8 +960,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The All filter
    */
   searchAll(filter) {
-    this.sort(this.resources);
-    this.setState({ filter, filteredResources: this.resources });
+    const activeResources = this.activeResources;
+    this.sort(activeResources);
+    this.setState({ filter, filteredResources: activeResources });
   }
 
   /**
@@ -898,7 +970,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByRootFolder(filter) {
-    const folderResources = this.resources.filter((resource) => !resource.folder_parent_id);
+    const folderResources = this.activeResources.filter((resource) => !resource.folder_parent_id);
     this.sort(folderResources);
     this.setState({ filter, filteredResources: folderResources });
   }
@@ -909,7 +981,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByFolder(filter) {
     const folderId = filter.payload.folder.id;
-    const folderResources = this.resources.filter((resource) => resource.folder_parent_id === folderId);
+    const folderResources = this.activeResources.filter((resource) => resource.folder_parent_id === folderId);
     this.sort(folderResources);
     this.setState({ filter, filteredResources: folderResources });
   }
@@ -921,7 +993,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   searchByTag(filter) {
     const tagId = filter.payload.tag.id;
-    const tagResources = this.resources.filter(
+    const tagResources = this.activeResources.filter(
       (resource) =>
         resource.tags && resource.tags.length > 0 && resource.tags.filter((tag) => tag.id === tagId).length > 0,
     );
@@ -970,7 +1042,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = (resource) => words.every((word) => matchResource(word, resource));
 
-    const filteredResources = this.resources.filter(matchText);
+    const filteredResources = this.activeResources.filter(matchText);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1002,7 +1074,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
           filter.payload.group.id,
         )) || [];
       // keep only the resource with the group
-      const groupResources = this.resources.filter((resource) => resourceIds.includes(resource.id));
+      const groupResources = this.activeResources.filter((resource) => resourceIds.includes(resource.id));
       this.sort(groupResources);
       this.setState({ filteredResources: groupResources });
       this.props.loadingContext.remove();
@@ -1014,7 +1086,17 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByItemsIOwn(filter) {
-    const filteredResources = this.resources.filter((resource) => resource.permission.type === 15);
+    const filteredResources = this.activeResources.filter((resource) => resource.permission.type === 15);
+    this.sort(filteredResources);
+    this.setState({ filter, filteredResources });
+  }
+
+  /**
+   * Search for resources the current user marked offline available
+   * @param {object} filter The filter
+   */
+  searchByOffline(filter) {
+    const filteredResources = this.resources.filter((resource) => resource.offline != null);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1024,7 +1106,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByPrivate(filter) {
-    const filteredResources = this.resources.filter((resource) => Boolean(resource.personal));
+    const filteredResources = this.activeResources.filter((resource) => Boolean(resource.personal));
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1034,7 +1116,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchByFavorite(filter) {
-    const filteredResources = this.resources.filter((resource) => resource.favorite !== null);
+    const filteredResources = this.activeResources.filter((resource) => resource.favorite !== null);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1044,7 +1126,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param {object} filter The filter
    */
   searchBySharedWithMe(filter) {
-    const filteredResources = this.resources.filter((resource) => resource.permission.type < 15);
+    const filteredResources = this.activeResources.filter((resource) => resource.permission.type < 15);
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
   }
@@ -1054,11 +1136,33 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter A "expired" filter
    */
   searchByExpired(filter) {
-    const filteredResources = this.resources.filter(
+    const filteredResources = this.activeResources.filter(
       (resource) => resource.expired && new Date(resource.expired) <= new Date(),
     );
     this.sort(filteredResources);
     this.setState({ filter, filteredResources });
+  }
+
+  /**
+   * Keep the deleted resources.
+   * @param filter A "trash" filter
+   */
+  searchByTrash(filter) {
+    this.props.loadingContext.add();
+    this.setState({ filter, selectedResources: [] }, async () => {
+      try {
+        const deletedResources =
+          (await this.props.context.port.request("passbolt.resources.find-deleted-for-local-storage")) || [];
+        const filteredResources =
+          deletedResources.length > 0 ? deletedResources : this.resources.filter((resource) => resource.deleted);
+        this.sort(filteredResources);
+        this.setState({ filteredResources });
+      } catch (error) {
+        await this.props.actionFeedbackContext.displayError(error.message);
+      } finally {
+        this.props.loadingContext.remove();
+      }
+    });
   }
 
   /** RESOURCE SELECTION */
@@ -1158,6 +1262,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       const mustRedirect = this.props.location.pathname !== `/app/passwords/filter/expired`;
       if (mustRedirect) {
         this.props.history.push({ pathname: `/app/passwords/filter/expired` });
+      }
+      return;
+    }
+
+    // Case of resources filtered by trash
+    const isTrashFilter = filter.type === ResourceWorkspaceFilterTypes.TRASH;
+    if (isTrashFilter) {
+      const mustRedirect = this.props.location.pathname !== `/app/passwords/filter/trash`;
+      if (mustRedirect) {
+        this.props.history.push({ pathname: `/app/passwords/filter/trash` });
       }
       return;
     }
@@ -1284,6 +1398,31 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.setState({ resourceFileImportResult: result });
   }
 
+  /**
+   * Refresh the current filter after resources have been restored.
+   */
+  handleResourcesRestored() {
+    this.setState({ selectedResources: [] }, () => this.search(this.state.filter));
+  }
+
+  /**
+   * Refresh the current filter after resources have been deleted.
+   */
+  // eslint-disable-next-line no-unused-vars
+  handleResourcesDeleted(resources = [], options = {}) {
+    const isPermanentDelete = options.recoverable === false;
+    const filter = isPermanentDelete ? { type: ResourceWorkspaceFilterTypes.TRASH } : this.state.filter;
+    if (isPermanentDelete) {
+      this.props.history.replace({
+        pathname: `/app/passwords/filter/trash`,
+        state: { filter },
+      });
+    }
+    this.setState({ selectedResources: [], details: { folder: null, resource: null }, filter }, () =>
+      this.search(filter),
+    );
+  }
+
   /** Resource export */
 
   /**
@@ -1315,6 +1454,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
     if (!this.canUseFolders) {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
+    }
+    if (!this.canUseOfflineMode) {
+      columnsResourceSetting.removeById(ColumnModelTypes.OFFLINE_MODE);
+    }
+    if (!this.hasPinCodeResourceTypes) {
+      columnsResourceSetting.removeById(ColumnModelTypes.PIN_CODE);
     }
     const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     const rowsSetting = gridUserSettingEntity?.rowsSetting;
@@ -1410,14 +1555,22 @@ ResourceWorkspaceContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object,
   passwordExpiryContext: PropTypes.object, // the password expiry contexts
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
+  offlineSettingsLocalStorageContext: PropTypes.object, // The offline settings local storage context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceTypesLocalStorageContext: PropTypes.object, // The resource types local storage context
   loadingContext: PropTypes.object, // The loading context
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
   withRbac(
-    withPasswordExpiry(
-      withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+    withOfflineSettingsLocalStorage(
+      withResourceTypesLocalStorage(
+        withPasswordExpiry(
+          withLoading(withActionFeedback(withRouter(withTranslation("common")(ResourceWorkspaceContextProvider)))),
+        ),
+      ),
     ),
   ),
 );
@@ -1456,6 +1609,8 @@ export const ResourceWorkspaceFilterTypes = {
   FAVORITE: "FILTER-BY-FAVORITE", // Favorite resources
   SHARED_WITH_ME: "FILTER-BY-SHARED-WITH-ME", // Resources shared with the current user (who is not the owner)
   EXPIRED: "FILTER-BY-EXPIRED", // Resources recently modified
+  OFFLINE: "FILTER-BY-OFFLINE", // Resources marked as available offline
+  TRASH: "FILTER-BY-TRASH", // Deleted resources
 };
 
 /**

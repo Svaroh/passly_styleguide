@@ -13,10 +13,11 @@
  */
 
 import React from "react";
+import { withRouter } from "react-router-dom";
 import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import HandlePermissionWorkflow, {
@@ -26,6 +27,7 @@ import { withWorkflow } from "../../../contexts/WorkflowContext";
 import ExportResources from "../ExportResources/ExportResources";
 import { Trans, withTranslation } from "react-i18next";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withOfflineSettingsLocalStorage } from "../../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { withProgress } from "../../../contexts/ProgressContext";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
@@ -54,7 +56,9 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
+import OfflineModeSVG from "../../../../img/svg/offline_mode.svg";
 import SecretHistorySVG from "../../../../img/svg/history.svg";
+import RestoreSVG from "../../../../img/svg/reply.svg";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
@@ -63,6 +67,8 @@ import Logger from "../../../../shared/utils/logger";
 import { withSecretRevisionsSettings } from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
+import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -74,6 +80,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.offlineModeServiceWorkerService = new OfflineModeServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -82,6 +89,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   bindCallbacks() {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleRestoreClickEvent = this.handleRestoreClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleCopyPermalinkClickEvent = this.handleCopyPermalinkClickEvent.bind(this);
     this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
@@ -94,13 +102,106 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleSetExpiryDateClickEvent = this.handleSetExpiryDateClickEvent.bind(this);
     this.handleClearSelectionClick = this.handleClearSelectionClick.bind(this);
     this.handleSecretHistoryClick = this.handleSecretHistoryClick.bind(this);
+    this.handleOfflineClickEvent = this.handleOfflineClickEvent.bind(this);
+  }
+
+  /**
+   * ComponentDidMount
+   */
+  componentDidMount() {
+    this.openEditResourceFromQuery();
+  }
+
+  /**
+   * ComponentDidUpdate
+   */
+  componentDidUpdate() {
+    this.openEditResourceFromQuery();
+  }
+
+  /**
+   * Open the edit resource dialog when requested from the URL action parameter.
+   */
+  openEditResourceFromQuery() {
+    if (!this.props.location?.search) {
+      return;
+    }
+
+    const queryParameters = new URLSearchParams(this.props.location.search);
+    if (queryParameters.get("action") !== "edit" || !this.hasOneResourceSelected()) {
+      return;
+    }
+
+    const resource = this.selectedResources[0];
+    const selectedResourceId = this.props.match?.params?.selectedResourceId;
+    if (selectedResourceId && selectedResourceId !== resource.id) {
+      return;
+    }
+
+    if (!this.canUpdate()) {
+      this.removeEditResourceQuery(queryParameters);
+      return;
+    }
+
+    if (!this.props.resourceTypes) {
+      return;
+    }
+
+    this.removeEditResourceQuery(queryParameters);
+    if (this.canEditResource()) {
+      this.props.workflowContext.start(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource,
+      });
+    } else {
+      this.displayActionAborted();
+    }
+  }
+
+  /**
+   * Remove consumed QuickAccess edit query parameters.
+   * @param {URLSearchParams} queryParameters The current query parameters.
+   */
+  removeEditResourceQuery(queryParameters) {
+    if (!this.props.history || !this.props.location) {
+      return;
+    }
+
+    queryParameters.delete("action");
+    const search = queryParameters.toString();
+    this.props.history.replace({
+      pathname: this.props.location.pathname,
+      search: search ? `?${search}` : "",
+      state: this.props.location.state,
+    });
   }
 
   /**
    * handle delete one or more resources
    */
   handleDeleteClickEvent() {
-    this.props.dialogContext.open(DeleteResource, { resources: this.selectedResources });
+    this.props.dialogContext.open(DeleteResource, {
+      resources: this.selectedResources,
+      recoverable: !this.isTrashFilter(),
+    });
+  }
+
+  /**
+   * Restore one or more resources.
+   * @returns {Promise<void>}
+   */
+  async handleRestoreClickEvent() {
+    const resourcesIds = this.selectedResources.map((resource) => resource.id);
+    try {
+      await this.props.context.port.request("passbolt.resources.restore-all", resourcesIds);
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The resource has been restored successfully.", { count: resourcesIds.length }),
+      );
+      this.props.resourceWorkspaceContext.onResourcesRestored();
+    } catch (error) {
+      Logger.error(error);
+      await this.props.actionFeedbackContext.displayError(error.message);
+    }
   }
 
   /**
@@ -130,6 +231,40 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleSecretHistoryClick() {
     this.props.dialogContext.open(DisplayResourceSecretHistory, { resource: this.selectedResources[0] });
+  }
+
+  /**
+   * Handle the click on the offline menu item to mark or remove the resource from offline availability.
+   * @returns {Promise<void>}
+   */
+  async handleOfflineClickEvent() {
+    const resource = this.selectedResources[0];
+    const isAvailableOffline = Boolean(resource.offline);
+    try {
+      if (isAvailableOffline) {
+        await this.offlineModeServiceWorkerService.unmarkItem(resource.offline.id);
+        await this.props.actionFeedbackContext.displaySuccess(
+          this.translate("The resource is no longer available offline."),
+        );
+      } else {
+        await this.offlineModeServiceWorkerService.markResource(resource.id);
+        await this.props.actionFeedbackContext.displaySuccess(
+          this.translate("The resource has been made available offline."),
+        );
+      }
+    } catch (error) {
+      Logger.error(error);
+      const maxItemsError = error.data?.body?.max_items;
+      if (maxItemsError) {
+        await this.props.actionFeedbackContext.displayError(
+          this.translate("You have reached the maximum number of offline items (1000)."),
+        );
+      } else {
+        await this.props.actionFeedbackContext.displayError(
+          this.translate("Unable to update the offline availability of the resource."),
+        );
+      }
+    }
   }
 
   /**
@@ -377,6 +512,19 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Is the current filter the trash.
+   * @return {boolean}
+   */
+  isTrashFilter() {
+    const selectedResources = this.selectedResources || [];
+    return (
+      this.props.resourceWorkspaceContext.filter?.type === ResourceWorkspaceFilterTypes.TRASH ||
+      this.props.location?.pathname?.includes("/app/passwords/filter/trash") ||
+      (selectedResources.length > 0 && selectedResources.every((resource) => Boolean(resource.deleted)))
+    );
+  }
+
+  /**
    * Can share the selected resources
    * @return {boolean}
    */
@@ -482,7 +630,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   hasMoreActionAllowed() {
-    return this.canExport() || (this.canOverridePasswordExpiry() && this.canUpdate()) || this.canViewSecretHistory();
+    return (
+      this.canExport() ||
+      (this.canOverridePasswordExpiry() && this.canUpdate()) ||
+      this.canViewSecretHistory() ||
+      this.canUseOffline()
+    );
   }
 
   /**
@@ -537,6 +690,37 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Can mark resource offline
+   * @return {boolean}
+   */
+  canUseOffline() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
+
+    return (
+      resourceType?.isV5() &&
+      this.props.context.siteSettings.canIUse("offlineMode") &&
+      Boolean(this.props.offlineSettings) &&
+      this.props.rbacContext.canIUseAction(
+        this.selectedResources[0]?.offline ? actions.OFFLINE_ITEMS_DELETE : actions.OFFLINE_ITEMS_ADD,
+      )
+    );
+  }
+
+  /**
+   * To check if the resource is a Password or TOTP resource
+   *
+   * This method is to add a conditional check for Offline Mode Phase 1
+   * where the option to mark/unmark a resource as available offline is
+   * only for passwords or TOTP
+   *
+   * @return {boolean}
+   */
+  isPasswordOrTotp() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.selectedResources[0]?.resource_type_id);
+    return resourceType?.hasPassword() || resourceType?.hasTotp();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -553,12 +737,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const hasOneResourceSelected = this.hasOneResourceSelected();
 
     // Main actions
-    const canViewShare = this.canShare();
-    const canViewCopy = hasOneResourceSelected;
+    const isTrashFilter = this.isTrashFilter();
     const canUpdate = this.canUpdate();
-    const canViewEdit = hasOneResourceSelected && canUpdate;
+    const canViewRestore = isTrashFilter && canUpdate;
+    const canViewShare = !isTrashFilter && this.canShare();
+    const canViewCopy = !isTrashFilter && hasOneResourceSelected;
+    const canViewEdit = !isTrashFilter && hasOneResourceSelected && canUpdate;
     const canViewDelete = canUpdate;
-    const hasMoreActionAllowed = this.hasMoreActionAllowed();
+    const hasMoreActionAllowed = !isTrashFilter && this.hasMoreActionAllowed();
 
     // Three dot menu
     const canExport = this.canExport();
@@ -569,11 +755,22 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     // Copy menu
     const canCopySecret = this.canCopySecrets() && this.canCopyPassword();
     const canCopyTotp = this.canUseTotp() && this.canCopyTotp();
+    const canMarkOrRemoveOfflineAccess = hasOneResourceSelected && this.canUseOffline() && this.isPasswordOrTotp();
 
     return (
       <div className="actions" ref={this.props.actionsButtonRef}>
         <div className="actions-wrapper">
           <ul>
+            {canViewRestore && (
+              <li id="restore_action">
+                <button type="button" className="button-action-contextual" onClick={this.handleRestoreClickEvent}>
+                  <RestoreSVG />
+                  <span>
+                    <Trans>Restore</Trans>
+                  </span>
+                </button>
+              </li>
+            )}
             {canViewShare && (
               <li id="share_action">
                 <button type="button" className="button-action-contextual" onClick={this.handleShareClickEvent}>
@@ -761,6 +958,25 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                         </button>
                       </DropdownMenuItem>
                     )}
+                    {canMarkOrRemoveOfflineAccess && (
+                      <DropdownMenuItem>
+                        <button
+                          id="offline_mark_unmark_option"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleOfflineClickEvent}
+                        >
+                          <OfflineModeSVG />
+                          <span>
+                            {this.selectedResources[0].offline ? (
+                              <Trans>Remove offline availability</Trans>
+                            ) : (
+                              <Trans>Make available offline</Trans>
+                            )}
+                          </span>
+                        </button>
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenu>
                 </Dropdown>
               </li>
@@ -785,10 +1001,14 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   actionsButtonRef: PropTypes.object, // The forwarded ref of the buttons container
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  offlineSettings: PropTypes.object, // The organisation offline settings (null when offline mode is disabled)
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   workflowContext: PropTypes.any, // the permission workflow context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  location: PropTypes.object, // The router location
+  match: PropTypes.object, // The router match
+  history: PropTypes.object, // The router history
   passwordExpiryContext: PropTypes.object, // the password expiry context
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
@@ -802,14 +1022,16 @@ export default withAppContext(
   withMetadataKeysSettingsLocalStorage(
     withClipboard(
       withRbac(
-        withDialog(
-          withWorkflow(
-            withProgress(
-              withPasswordExpiry(
-                withSecretRevisionsSettings(
-                  withResourceWorkspace(
-                    withResourceTypesLocalStorage(
-                      withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+        withOfflineSettingsLocalStorage(
+          withDialog(
+            withWorkflow(
+              withProgress(
+                withPasswordExpiry(
+                  withSecretRevisionsSettings(
+                    withResourceWorkspace(
+                      withResourceTypesLocalStorage(
+                        withActionFeedback(withRouter(withTranslation("common")(DisplayResourcesWorkspaceMenu))),
+                      ),
                     ),
                   ),
                 ),
