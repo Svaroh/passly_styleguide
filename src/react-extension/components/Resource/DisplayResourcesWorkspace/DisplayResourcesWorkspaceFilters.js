@@ -290,16 +290,6 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
                   </button>
                 </DropdownMenuItem>
               )}
-              {this.canUseOfflineMode && (
-                <DropdownMenuItem>
-                  <button type="button" className="no-border" onClick={this.handleOfflineClick}>
-                    <OfflineModeSVG />
-                    <span>
-                      <Trans>Available offline</Trans>
-                    </span>
-                  </button>
-                </DropdownMenuItem>
-              )}
               <DropdownMenuItem>
                 <button type="button" className="no-border" onClick={this.handleTrashClick}>
                   <DeleteSVG />
