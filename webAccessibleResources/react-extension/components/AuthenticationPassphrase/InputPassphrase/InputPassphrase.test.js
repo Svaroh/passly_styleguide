@@ -70,7 +70,7 @@ describe("InputPassphrase", () => {
     // Dialog label exists and correct.
     const dialogLabel = container.querySelector(".dialog-content label");
     expect(dialogLabel).not.toBeNull();
-    expect(dialogLabel.textContent).toBe("You need your passphrase to continue.");
+    expect(dialogLabel.textContent).toBe("Passphrase");
 
     // Passphrase input field exists.
     const passphraseWrapper = container.querySelector(".input.password");
