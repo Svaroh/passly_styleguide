@@ -406,7 +406,9 @@ class InputPassphrase extends Component {
     return (
       userSettings?.fullName ||
       (account?.first_name ? `${account.first_name} ${account.last_name}` : "") ||
-      (loggedInUser?.profile?.first_name ? `${loggedInUser.profile.first_name} ${loggedInUser.profile.last_name}` : "") ||
+      (loggedInUser?.profile?.first_name
+        ? `${loggedInUser.profile.first_name} ${loggedInUser.profile.last_name}`
+        : "") ||
       ""
     );
   }
@@ -421,7 +423,7 @@ class InputPassphrase extends Component {
   get trustedDomain() {
     const account = this.props.context?.account;
     const userSettings = this.props.context?.userSettings;
-    return userSettings?.getTrustedDomain ? userSettings.getTrustedDomain() : (account?.domain || "");
+    return userSettings?.getTrustedDomain ? userSettings.getTrustedDomain() : account?.domain || "";
   }
 
   /**
@@ -467,8 +469,12 @@ class InputPassphrase extends Component {
                   <FingerprintSVG className="icon" />
                   <span>
                     {this.state.isUnlockingBiometric
-                      ? (isUk ? "Розблокування..." : this.translate("Unlocking..."))
-                      : (isUk ? "Вхід по відбитку пальця" : this.translate("Sign in with fingerprint"))}
+                      ? isUk
+                        ? "Розблокування..."
+                        : this.translate("Unlocking...")
+                      : isUk
+                        ? "Вхід по відбитку пальця"
+                        : this.translate("Sign in with fingerprint")}
                   </span>
                 </button>
                 {this.state.biometricError && <div className="error-message">{this.state.biometricError}</div>}
@@ -491,7 +497,11 @@ class InputPassphrase extends Component {
                     onChange={this.handleInputChange}
                     disabled={this.state.processing || this.state.isUnlockingBiometric}
                     preview={true}
-                    securityToken={this.props.context?.userSettings?.getSecurityToken ? this.props.context.userSettings.getSecurityToken() : null}
+                    securityToken={
+                      this.props.context?.userSettings?.getSecurityToken
+                        ? this.props.context.userSettings.getSecurityToken()
+                        : null
+                    }
                   />
                   {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
                 </div>
@@ -543,7 +553,7 @@ class InputPassphrase extends Component {
                   type="submit"
                   className="button primary form"
                   role="button"
-                  disabled={this.state.processing || this.state.isUnlockingBiometric}
+                  disabled={this.state.isUnlockingBiometric}
                 >
                   <Trans>Ok</Trans>
                 </button>
