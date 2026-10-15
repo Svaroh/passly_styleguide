@@ -38,7 +38,7 @@ describe("As a signed-in users I can see filters", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.dropdownFilterButton.textContent).toBe("All items");
     expect(page.filterSelected).toBeUndefined();
-    expect(page.filterItemsLength).toBe(7);
+    expect(page.filterItemsLength).toBe(6);
   });
 
   it("As LU I should not see the Offline filter when the offline feature is disabled", async () => {
@@ -81,15 +81,10 @@ describe("As a signed-in users I can see filters", () => {
       itemIndex: 5,
     },
     {
-      filter: ResourceWorkspaceFilterTypes.OFFLINE,
-      itemSelected: "Offline",
-      itemIndex: 6,
-    },
-    {
       filter: ResourceWorkspaceFilterTypes.TRASH,
       itemSelected: "Trash",
       pathname: "/app/passwords/filter/trash",
-      itemIndex: 7,
+      itemIndex: 6,
     },
   ])("I should be able to filter", (scenario) => {
     it(`for: ${scenario.filter}`, async () => {

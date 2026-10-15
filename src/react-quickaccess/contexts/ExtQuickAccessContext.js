@@ -56,32 +56,62 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async initialize() {
     try {
-      const activeSession =
-        (await this.props.activeSessionLocalStorageContext.updateLocalStorage()) ||
-        this.props.activeSessionLocalStorageContext.get() ||
-        this.props.activeSession;
-      await this.getUserSettings();
-      await this.getLocale();
-      const isSessionOnline = Boolean(activeSession?.isSessionOnline);
-      const isServerReachable = Boolean(activeSession?.isServerReachable);
-      const isSessionOffline = Boolean(activeSession?.isSessionOffline);
+      const userSettingsPromise = this.getUserSettings();
+      const localePromise = this.getLocale();
 
-      const siteSettings =
-        isSessionOnline && isServerReachable
-          ? await this.findAndUpdateSiteSettings()
-          : await this.getOrFindSiteSettings();
-      if (isSessionOnline) {
-        await this.loadOnlineData(siteSettings, activeSession);
-      } else if (isSessionOffline) {
-        await this.loadOfflineData(siteSettings);
+      let activeSession = this.props.activeSessionLocalStorageContext?.get() || this.props.activeSession;
+
+      if (!activeSession && this.props.storage && this.props.account) {
+        try {
+          const storageKey = `active_session-${this.props.account.id}`;
+          const storageData = await this.props.storage.local.get([storageKey]);
+          if (storageData && storageData[storageKey]) {
+            activeSession = new UserActiveSessionEntity(storageData[storageKey]);
+          }
+        } catch {
+          // ignore storage read error
+        }
       }
-      if (!isServerReachable) {
-        if (!this.state.loggedInUser) {
-          await this.getLoggedInUser();
+
+      const siteSettingsPromise = this.getOrFindSiteSettings();
+      const [siteSettings] = await Promise.all([siteSettingsPromise, userSettingsPromise, localePromise]);
+
+      if (activeSession) {
+        const isSessionOnline = Boolean(activeSession.isSessionOnline);
+        const isSessionOffline = Boolean(activeSession.isSessionOffline);
+        if (isSessionOnline) {
+          await this.loadOnlineData(siteSettings, activeSession);
+        } else if (isSessionOffline) {
+          await this.loadOfflineData(siteSettings);
         }
-        if (!this.state.rbacs) {
-          await this.getOrFindRbacs(siteSettings);
+      }
+
+      const updatePromise = this.props.activeSessionLocalStorageContext?.updateLocalStorage?.();
+
+      if (!activeSession) {
+        activeSession = await updatePromise;
+        const isSessionOnline = Boolean(activeSession?.isSessionOnline);
+        const isServerReachable = Boolean(activeSession?.isServerReachable);
+        const isSessionOffline = Boolean(activeSession?.isSessionOffline);
+
+        const freshSiteSettings =
+          isSessionOnline && isServerReachable ? await this.findAndUpdateSiteSettings() : siteSettings;
+
+        if (isSessionOnline) {
+          await this.loadOnlineData(freshSiteSettings, activeSession);
+        } else if (isSessionOffline) {
+          await this.loadOfflineData(freshSiteSettings);
         }
+        if (!isServerReachable) {
+          if (!this.state.loggedInUser) {
+            await this.getLoggedInUser();
+          }
+          if (!this.state.rbacs) {
+            await this.getOrFindRbacs(freshSiteSettings);
+          }
+        }
+      } else if (updatePromise) {
+        this.syncSessionInBackground(updatePromise);
       }
     } catch (e) {
       console.error(e);
@@ -141,6 +171,23 @@ export class ExtQuickAccessContextProvider extends React.Component {
   }
 
   /**
+   * Sync the session in background without blocking the UI
+   * @param {Promise<UserActiveSessionEntity>} updatePromise
+   * @return {Promise<void>}
+   */
+  async syncSessionInBackground(updatePromise) {
+    try {
+      const updatedSession = await updatePromise;
+      if (updatedSession?.isSessionOnline && updatedSession?.isServerReachable) {
+        const freshSiteSettings = await this.findAndUpdateSiteSettings();
+        await this.loadOnlineData(freshSiteSettings, updatedSession);
+      }
+    } catch {
+      // ignore background sync errors
+    }
+  }
+
+  /**
    * Bind callbacks
    */
   bindCallbacks() {
@@ -174,7 +221,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
       rbacs: null, // The role based access control
       hasError: false,
       errorMessage: "",
-      locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
+      locale: "uk-UA",
       // Search
       search: "",
       searchHistory: {},
@@ -364,7 +411,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
       this.state.userSettings !== null &&
       this.state.siteSettings !== undefined &&
       this.state.locale !== null &&
-      (Boolean(activeSession.isSessionOnline) || this.isOfflineDataLoaded)
+      (!activeSession.isAuthenticated || Boolean(activeSession.isSessionOnline) || this.isOfflineDataLoaded)
     );
   }
 
@@ -389,7 +436,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
                 <div className="processing-wrapper">
                   <SpinnerSVG />
                   <p className="processing-text">
-                    <Trans>Connecting your account</Trans>
+                    <Trans i18nKey="Connecting your account">Підключення вашого облікового запису</Trans>
                   </p>
                 </div>
               )}

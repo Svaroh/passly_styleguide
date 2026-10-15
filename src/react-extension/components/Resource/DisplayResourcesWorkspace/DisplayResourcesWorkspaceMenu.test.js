@@ -874,5 +874,37 @@ describe("See Workspace Menu", () => {
 
       expect(page.displayMenu.dropdownMenuOffline).toBeNull();
     });
+
+    it("As LU opening a resource with action=edit query should start edit permission workflow", () => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceOwned();
+      const resource = props.resourceWorkspaceContext.selectedResources[0];
+      const replaceSpy = jest.fn();
+      const workflowStartSpy = jest.fn();
+      props.location = {
+        pathname: `/app/passwords/view/${resource.id}`,
+        search: "?action=edit",
+      };
+      props.match = {
+        params: {
+          selectedResourceId: resource.id,
+        },
+      };
+      props.history = {
+        replace: replaceSpy,
+      };
+      props.workflowContext = {
+        start: workflowStartSpy,
+      };
+
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props, [
+        `/app/passwords/view/${resource.id}?action=edit`,
+      ]);
+      expect(page.displayMenu).toBeDefined();
+      expect(workflowStartSpy).toHaveBeenCalledWith(HandlePermissionWorkflow, {
+        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
+        resource,
+      });
+    });
   });
 });

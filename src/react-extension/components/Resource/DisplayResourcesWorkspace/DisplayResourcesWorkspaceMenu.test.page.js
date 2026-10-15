@@ -29,11 +29,12 @@ export default class DisplayResourcesWorkspaceMenuPage {
    * Default constructor
    * @param appContext An app context
    * @param props Props to attach
+   * @param {Array<string>} [initialEntries=["/"]] The router initial entries
    */
-  constructor(appContext, props) {
+  constructor(appContext, props, initialEntries = ["/"]) {
     this._page = render(
       <MockTranslationProvider>
-        <MemoryRouter initialEntries={["/"]}>
+        <MemoryRouter initialEntries={initialEntries}>
           <AppContextProvider context={appContext}>
             <ManageDialogs />
             <DisplayResourcesWorkspaceMenu {...props} />

@@ -1,4 +1,85 @@
 .passphrase-entry.dialog-wrapper {
+  .login-user {
+    width: 100%;
+    margin: 0 auto 1.6rem auto;
+    text-align: center;
+    overflow-wrap: break-word;
+
+    & > * {
+      text-align: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .user-avatar {
+      margin: 0 auto 1.2rem auto;
+    }
+
+    .login-user-name {
+      font-weight: bold;
+      font-size: 1.6rem;
+      line-height: 2rem;
+      margin: 0.8rem 0 0.4rem 0;
+    }
+
+    .login-user-email {
+      font-size: 1.4rem;
+      line-height: 1.8rem;
+      opacity: 0.75;
+      margin: 0 0 1.2rem 0;
+    }
+  }
+
+  .biometric-actions {
+    margin-bottom: 1.6rem;
+
+    .biometric-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      width: 100%;
+      box-sizing: border-box;
+
+      .icon, svg {
+        width: 2rem;
+        height: 2rem;
+        fill: currentColor;
+      }
+    }
+
+    .biometric-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.2rem 0 0.8rem 0;
+      opacity: 0.6;
+      font-size: 1.3rem;
+
+      &::before, &::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid currentColor;
+        opacity: 0.25;
+      }
+
+      span {
+        padding: 0 1rem;
+      }
+    }
+
+    .error-message {
+      margin-top: 0.8rem;
+      text-align: center;
+      color: #d32f2f;
+      font-size: 1.3rem;
+    }
+  }
+
+  .biometric-enable {
+    margin: 1rem 0;
+  }
+
   .remember-me {
     display: flex;
 

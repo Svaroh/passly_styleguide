@@ -148,14 +148,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     }
 
     this.removeEditResourceQuery(queryParameters);
-    if (this.canEditResource()) {
-      this.props.workflowContext.start(HandlePermissionWorkflow, {
-        operation: PERMISSION_WORKFLOW_OPERATION.EDIT_RESOURCE,
-        resource,
-      });
-    } else {
-      this.displayActionAborted();
-    }
+    this.handleEditClickEvent();
   }
 
   /**

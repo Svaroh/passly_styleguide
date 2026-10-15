@@ -155,5 +155,20 @@ describe("ExtQuickAccess Context", () => {
       context.state.siteSettings = null;
       expect(context.isReady()).toBeTruthy();
     });
+
+    it("is ready on an unauthenticated offline session without waiting for user profile", () => {
+      expect.assertions(2);
+      context.props.activeSession = new UserActiveSessionEntity(
+        defaultUserActiveSessionDto({
+          is_authenticated: false,
+          type: USER_ACTIVE_SESSION_OFFLINE,
+          is_server_reachable: false,
+        }),
+      );
+
+      expect(context.isReady()).toBeFalsy();
+      context.state.siteSettings = null;
+      expect(context.isReady()).toBeTruthy();
+    });
   });
 });
