@@ -32,6 +32,8 @@
     "!src/**/*.test.page.js"
   ],
   "moduleNameMapper": {
+    "^passly-styleguide/(.*)$": "<rootDir>/$1",
+    "^passbolt-styleguide/(.*)$": "<rootDir>/$1",
     "\\.svg$": "<rootDir>/test/mocks/svg.js"
   }
 }

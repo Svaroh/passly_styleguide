@@ -219,7 +219,7 @@ class GoogleSsoProviderForm extends React.PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
           )}
           <p>
-            <Trans>Allows Google and Passbolt API to securely share information.</Trans>{" "}
+            <Trans>Allows Google and Passly API to securely share information.</Trans>{" "}
             <a
               href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters"
               rel="noopener noreferrer"

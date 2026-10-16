@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.13.0
  */
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
+import EntitySchema from "passly-styleguide/src/shared/models/entity/abstract/entitySchema";
 import OfflineSettingsEntity, { COMMUNITY_EDITION_OFFLINE_SETTINGS } from "./offlineSettingsEntity";
 import { defaultOfflineSettingsDto, defaultOfflineSettingsDtoFromApi } from "./offlineSettingsEntity.test.data";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 
 describe("OfflineSettingsEntity", () => {
   describe("OfflineSettingsEntity::getSchema", () => {

@@ -16,7 +16,7 @@ import AvatarEntity from "./avatarEntity";
 import EntitySchema from "../abstract/entitySchema";
 import { defaultAvatarDto, minimalAvatarDto } from "../avatar/avatarEntity.test.data";
 import Validator from "validator";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 
 describe("AvatarEntity", () => {
   describe("::getSchema", () => {

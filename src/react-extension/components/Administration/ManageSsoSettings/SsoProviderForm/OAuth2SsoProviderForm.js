@@ -296,7 +296,7 @@ class OAuth2SsoProviderForm extends React.Component {
             <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
           )}
           <p>
-            <Trans>Allows your OAuth2 provider and Passbolt API to securely share information.</Trans>
+            <Trans>Allows your OAuth2 provider and Passly API to securely share information.</Trans>
           </p>
         </div>
       </>

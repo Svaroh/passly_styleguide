@@ -554,7 +554,7 @@ class DisplaySubscriptionKey extends React.Component {
             </h3>
             <p>
               <Trans>
-                For any change or question related to your passbolt subscription, kindly contact our sales team.
+                For any change or question related to your passly subscription, kindly contact our sales team.
               </Trans>
             </p>
             <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">

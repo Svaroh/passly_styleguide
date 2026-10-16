@@ -1,7 +1,18 @@
 {
   "minimumPackageAgeHours": 48,
   "npm": {
-    "minimumPackageAgeExclusions": ["passbolt-browser-extension", "passbolt-styleguide", "@aikidosec/*"],
-    "directDownloadMinimumPackageAgeExclusions": ["passbolt-browser-extension", "passbolt-styleguide"]
+    "minimumPackageAgeExclusions": [
+      "passly-browser-extension",
+      "passly-styleguide",
+      "passbolt-browser-extension",
+      "passbolt-styleguide",
+      "@aikidosec/*"
+    ],
+    "directDownloadMinimumPackageAgeExclusions": [
+      "passly-browser-extension",
+      "passly-styleguide",
+      "passbolt-browser-extension",
+      "passbolt-styleguide"
+    ]
   }
 }

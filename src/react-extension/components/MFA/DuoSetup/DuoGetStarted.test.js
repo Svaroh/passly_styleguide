@@ -40,7 +40,7 @@ describe("DuoGetStartedP", () => {
 
       expect(page.duoSignInIllustation).not.toBeNull();
       expect(page.duoSignInIllustationDescription.textContent).toEqual(
-        "You sign in to passbolt just like you normally do.",
+        "You sign in to passly just like you normally do.",
       );
       expect(page.duoPushNotificationIllustation).not.toBeNull();
       expect(page.duoPushNotificationIllustationDescription.textContent).toEqual("Use you 2FA device to authenticate.");

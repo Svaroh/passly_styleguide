@@ -563,7 +563,7 @@ class EditUser extends Component {
                 </label>
                 <Tooltip
                   message={this.translate(
-                    "This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.",
+                    "This user will not be able to sign in to passly and receive email notifications. Other users can share resource with it and add this user to a group.",
                   )}
                 >
                   <InfoSVG />

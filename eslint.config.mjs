@@ -71,7 +71,10 @@ export default [
           extensions: [".js", ".jsx", ".mjs", ".cjs"],
         },
         alias: {
-          map: [["passbolt-styleguide", path.resolve(__dirname)]],
+          map: [
+            ["passly-styleguide", path.resolve(__dirname)],
+            ["passbolt-styleguide", path.resolve(__dirname)],
+          ],
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
       },

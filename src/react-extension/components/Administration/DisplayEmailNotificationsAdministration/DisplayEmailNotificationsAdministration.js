@@ -491,7 +491,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     id="send-user-create-toggle-button"
                   />
                   <label className="text" htmlFor="send-user-create-toggle-button">
-                    <Trans>When new users are invited to passbolt, notify them.</Trans>
+                    <Trans>When new users are invited to passly, notify them.</Trans>
                   </label>
                 </span>
                 <span className="input toggle-switch form-element">

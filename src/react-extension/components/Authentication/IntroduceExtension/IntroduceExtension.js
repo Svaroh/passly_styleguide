@@ -69,7 +69,7 @@ class IntroduceExtension extends Component {
     return (
       <div className="introduce-setup-extension">
         <h1>
-          <Trans>Congratulations! Passbolt extension has been installed.</Trans>
+          <Trans>Congratulations! Passly extension has been installed.</Trans>
         </h1>
         <form onSubmit={this.handleSubmit}>
           <div className={`animated-setup-introduction ${this.state.browserName}`} />

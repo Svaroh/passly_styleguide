@@ -16,7 +16,7 @@ module.exports = defineConfig({
     functions: ["t", "translate", "*.t", "*.translate"],
     transComponents: ["Trans"],
     warnOnConflicts: true,
-    removeUnusedKeys: true,
+    removeUnusedKeys: false,
     transKeepBasicHtmlNodesFor: [],
   },
 });

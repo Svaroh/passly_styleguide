@@ -32,7 +32,7 @@ class DisplayUserGpgInformationHelp extends React.Component {
         <p>
           <Trans>
             This security token will be displayed when your passphrase is requested, so you can verify quickly the form
-            is coming from passbolt.
+            is coming from passly.
           </Trans>
           &nbsp;
           <Trans>

@@ -205,7 +205,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.helpBoxTitle.textContent).toBe("Need help?");
       expect(page.helpBoxDescription.textContent).toBe(
-        "For any change or question related to your passbolt subscription, kindly contact our sales team.",
+        "For any change or question related to your passly subscription, kindly contact our sales team.",
       );
       expect(page.helpContactSales.textContent).toMatch(/Contact Sales/);
       expect(page.helpContactSales.getAttribute("href")).toBe("https://www.passbolt.com/contact");

@@ -92,7 +92,7 @@ class DisplayBrowserNotSupported extends Component {
           <Trans>Sorry, your browser is not supported.</Trans>
         </h1>
         <p>
-          <Trans>Please download one of these browsers to get started with passbolt:</Trans>
+          <Trans>Please download one of these browsers to get started with passly:</Trans>
         </p>
         <div className="browser-button-list">
           {this.compatibleBrowserList.map((browserInfo, key) => (

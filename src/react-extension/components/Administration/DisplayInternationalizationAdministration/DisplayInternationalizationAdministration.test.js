@@ -55,7 +55,7 @@ describe("As AD I should see the internationalisation page", () => {
       expect(page.helpBox).not.toBeNull();
       expect(page.helpBoxTitle.textContent).toBe("Want to contribute?");
       expect(page.helpBoxDescription.textContent).toBe(
-        "Your language is missing or you discovered an error in the translation, help us to improve passbolt.",
+        "Your language is missing or you discovered an error in the translation, help us to improve passly.",
       );
       expect(page.helpBoxButton.textContent).toEqual("Contribute");
       expect(page.helpBoxButton.getAttribute("href")).toEqual("https://www.passbolt.com/docs/contribute/translation/");

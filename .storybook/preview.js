@@ -98,7 +98,7 @@ const parameters = {
       order: [
         'Getting started',
         'Foundations',
-        'Passbolt Components',
+        'Passly Components',
       ],
       method: "alphabetical"
     },

@@ -57,7 +57,7 @@ describe("As AD I can see a Breadcrumb", () => {
       expectedBreadcrumb: "User Passphrase Policies",
     },
     { menuType: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, expectedBreadcrumb: "Password Expiry" },
-    { menuType: AdministrationWorkspaceMenuTypes.HEALTHCHECK, expectedBreadcrumb: "Passbolt API Status" },
+    { menuType: AdministrationWorkspaceMenuTypes.HEALTHCHECK, expectedBreadcrumb: "Passly API Status" },
     {
       menuType: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
       expectedBreadcrumb: "Encrypted Metadata",

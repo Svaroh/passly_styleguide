@@ -12,8 +12,8 @@
  * @since         4.9.0
  */
 
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import EntitySchema from "passly-styleguide/src/shared/models/entity/abstract/entitySchema";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import AvatarUrlEntity from "./avatarUrlEntity";
 import { defaultAvatarUrlDto } from "./avatarUrlEntity.test.data";
 

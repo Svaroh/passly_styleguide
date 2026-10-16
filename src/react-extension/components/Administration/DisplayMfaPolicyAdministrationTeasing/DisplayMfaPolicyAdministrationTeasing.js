@@ -59,7 +59,7 @@ class DisplayMfaPolicyAdministrationTeasing extends React.Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Trans>Upgrade to Passbolt Pro</Trans>
+                  <Trans>Upgrade to Passly Pro</Trans>
                 </a>
               </div>
             </div>

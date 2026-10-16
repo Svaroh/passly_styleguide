@@ -193,7 +193,7 @@ describe("CreateGpgKey", () => {
       const props = defaultProps({ displayAs: CreateGpgKeyVariation.SETUP });
       const page = new CreateGpgKeyPage(props);
 
-      expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
+      expect(page.title).toBe("Welcome to Passly, please select a passphrase!");
     });
 
     it(`As AN on the setup workflow I should be able to import an existing key instead`, async () => {
@@ -297,7 +297,7 @@ describe("CreateGpgKey", () => {
       const props = defaultProps({ displayAs: CreateGpgKeyVariation.SETUP });
       const page = new CreateGpgKeyPage(props);
 
-      expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
+      expect(page.title).toBe("Welcome to Passly, please select a passphrase!");
     });
 
     it("As AN I should see a complexity as Quality if the passphrase is empty", async () => {

@@ -79,7 +79,7 @@ class ExportAccountToDesktop extends React.Component {
               <Trans>Download the desktop app</Trans>
             </h4>
             <p>
-              <Trans>Passbolt is available on the Windows store.</Trans>
+              <Trans>Passly is available on the Windows store.</Trans>
             </p>
             <a
               className="windows-store"

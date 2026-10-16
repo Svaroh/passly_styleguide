@@ -13,7 +13,7 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import { defaultProfileDto, minimalProfileDto } from "../profile/ProfileEntity.test.data";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import ProfileEntity from "./profileEntity";
 import { defaultAvatarDto } from "../avatar/avatarEntity.test.data";
 
