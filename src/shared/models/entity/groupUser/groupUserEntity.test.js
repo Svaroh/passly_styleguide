@@ -15,12 +15,12 @@ import GroupUserEntity from "./groupUserEntity";
 import UserEntity from "../user/userEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import {
   defaultGroupUser,
   defaultGroupUserWithUserDto,
   minimumGroupUserDto,
-} from "passbolt-styleguide/src/shared/models/entity/groupUser/groupUserEntity.test.data.js";
+} from "passly-styleguide/src/shared/models/entity/groupUser/groupUserEntity.test.data.js";
 
 describe("GroupUserEntity", () => {
   describe("GroupUserEntity::getSchema", () => {

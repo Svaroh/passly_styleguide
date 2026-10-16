@@ -361,7 +361,7 @@ class ChooseSecurityToken extends Component {
           <p>
             <Trans>
               This security token will be displayed when your passphrase is requested, so you can quickly verify the
-              form is coming from passbolt.
+              form is coming from passly.
             </Trans>
             &nbsp;
             <Trans>

@@ -1297,7 +1297,7 @@ class DisplayResourcesList extends React.Component {
                 <CircleOffSVG />
                 <div className="message">
                   <h1>
-                    <Trans>Welcome to passbolt!</Trans>
+                    <Trans>Welcome to Passly!</Trans>
                   </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
@@ -1311,7 +1311,7 @@ class DisplayResourcesList extends React.Component {
                 <CircleOffSVG />
                 <div className="message">
                   <h1>
-                    <Trans>Welcome to passbolt!</Trans>
+                    <Trans>Welcome to Passly!</Trans>
                   </h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;

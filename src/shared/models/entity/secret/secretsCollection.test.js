@@ -12,12 +12,12 @@
  * @since         4.10.1
  */
 
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
+import EntitySchema from "passly-styleguide/src/shared/models/entity/abstract/entitySchema";
 import SecretsCollection from "./secretsCollection";
-import { minimalDto, readSecret } from "passbolt-styleguide/src/shared/models/entity/secret/secretEntity.test.data";
+import { minimalDto, readSecret } from "passly-styleguide/src/shared/models/entity/secret/secretEntity.test.data";
 import SecretEntity from "./secretEntity";
-import { defaultSecretDataV5DefaultDto } from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
-import SecretDataV5DefaultEntity from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
+import { defaultSecretDataV5DefaultDto } from "passly-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
+import SecretDataV5DefaultEntity from "passly-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
 
 describe("SecretsCollection", () => {
   it("schema must validate", () => {

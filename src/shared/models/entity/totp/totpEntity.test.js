@@ -13,7 +13,7 @@
  */
 import TotpEntity from "./totpEntity";
 import { defaultTotpDto } from "./totpDto.test.data";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 

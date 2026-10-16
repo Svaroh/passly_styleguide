@@ -723,7 +723,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       )}
                       <p>
                         <Trans>
-                          This is the name users will see in their mailbox when passbolt sends a notification.
+                          This is the name users will see in their mailbox when passly sends a notification.
                         </Trans>
                       </p>
                     </div>
@@ -758,7 +758,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       )}
                       <p>
                         <Trans>
-                          This is the email address users will see in their mail box when passbolt sends a notification.
+                          This is the email address users will see in their mail box when passly sends a notification.
                           <br />
                           It&apos;s a good practice to provide a working email address that users can reply to.
                         </Trans>
@@ -807,7 +807,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
               </h3>
               <p>
                 <Trans>
-                  Passbolt needs an smtp server in order to send invitation emails after an account creation and to send
+                  Passly needs an smtp server in order to send invitation emails after an account creation and to send
                   email notifications.
                 </Trans>
               </p>

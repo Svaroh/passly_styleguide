@@ -36,7 +36,7 @@ class DisplayRestartFromScratchError extends Component {
           <br />
           <br />
           <Trans>
-            If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the
+            If you changed systems, or reinstalled passly web extension in the meantime, you will need to start the
             account recovery process from scratch.
           </Trans>
         </p>

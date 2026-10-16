@@ -36,7 +36,7 @@ describe("As AN I should see the account recovery restart from scratch", () => {
       expect(page.title).toBe("Sorry, wrong computer or browser...");
       // message
       expect(page.message).toBe(
-        "You need to finalize the account recovery process with the same computer you used for the account recovery request.If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the account recovery process from scratch.",
+        "You need to finalize the account recovery process with the same computer you used for the account recovery request.If you changed systems, or reinstalled passly web extension in the meantime, you will need to start the account recovery process from scratch.",
       );
       // download
       expect(page.linkToRestartFromScratch).toBe("Restart from scratch");

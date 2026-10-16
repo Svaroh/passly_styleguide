@@ -624,7 +624,7 @@ class TransferToMobile extends React.Component {
                 <Trans>Download the mobile app</Trans>
               </h4>
               <p>
-                <Trans>Passbolt is available on AppStore & PlayStore</Trans>
+                <Trans>Passly is available on AppStore & PlayStore</Trans>
               </p>
               <div className="stores">
                 <a
@@ -635,7 +635,7 @@ class TransferToMobile extends React.Component {
                 ></a>
                 <a
                   className="play-store"
-                  href="https://play.google.com/store/apps/details?id=com.passbolt.mobile.android"
+                  href="https://play.google.com/store/apps/details?id=net.svaroh.passly"
                   target="_blank"
                   rel="noopener noreferrer"
                 ></a>

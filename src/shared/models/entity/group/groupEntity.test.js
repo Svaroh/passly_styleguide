@@ -13,7 +13,7 @@
  */
 import GroupEntity from "./groupEntity";
 import EntitySchema from "../abstract/entitySchema";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import { defaultGroupDto, minimumGroupUserDto } from "./groupEntity.test.data";
 import { defaultGroupUser } from "../groupUser/groupUserEntity.test.data";
 import GroupsUsersCollection from "../groupUser/groupsUsersCollection";

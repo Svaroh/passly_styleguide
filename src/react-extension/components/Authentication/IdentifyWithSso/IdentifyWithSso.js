@@ -158,7 +158,7 @@ class IdentifyWithSso extends Component {
           <Trans>Welcome back!</Trans>
         </h1>
         <p>
-          <Trans>Your browser is not configured to work with this passbolt instance.</Trans>{" "}
+          <Trans>Your browser is not configured to work with this passly instance.</Trans>{" "}
           <Trans>Please authenticate with the Single Sign-On provider to continue.</Trans>
         </p>
         <div className="sso-login-form form-actions">

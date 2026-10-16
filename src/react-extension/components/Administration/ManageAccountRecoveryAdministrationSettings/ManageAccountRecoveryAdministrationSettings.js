@@ -399,7 +399,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                       Your organization recovery key will be used to decrypt and recover the private key and passphrase
                       of the users that are participating in the account recovery program.
                     </Trans>{" "}
-                    <Trans>The organization private recovery key should not be stored in passbolt.</Trans>{" "}
+                    <Trans>The organization private recovery key should not be stored in passly.</Trans>{" "}
                     <Trans>You should keep it offline in a safe place.</Trans>
                   </p>
                   <div className="recovery-key-details">

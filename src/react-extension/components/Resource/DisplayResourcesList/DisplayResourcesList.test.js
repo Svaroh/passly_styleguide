@@ -53,7 +53,7 @@ describe("Display Resources", () => {
       const props = defaultProps();
       const page = new DisplayResourcesListPage(props);
       // Wait until the text is found (This will ensure the state has been updated)
-      await screen.findByText("Welcome to passbolt!");
+      await screen.findByText("Welcome to Passly!");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
@@ -104,7 +104,7 @@ describe("Display Resources", () => {
     it("As LU, I should see an empty content when there are no private resources matching the private resource search", async () => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
       // Wait until the text is found (This will ensure the state has been updated)
-      await screen.findByText("Welcome to passbolt!");
+      await screen.findByText("Welcome to Passly!");
       expect(page.hasEmptyContent).toBeTruthy();
     });
 

@@ -307,7 +307,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   </div>
                   <p>
                     <Trans>
-                      You can set the default length for the passwords that are generated randomly by passbolt in the
+                      You can set the default length for the passwords that are generated randomly by passly in the
                       password generator.
                     </Trans>
                   </p>
@@ -350,7 +350,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                     <p>
                       <Trans>
                         You can select the set of characters used for the passwords that are generated randomly by
-                        passbolt in the password generator.
+                        passly in the password generator.
                       </Trans>
                     </p>
                   </div>
@@ -415,7 +415,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   </div>
                   <p>
                     <Trans>
-                      You can set the default length for the passphrases that are generated randomly by passbolt in the
+                      You can set the default length for the passphrases that are generated randomly by passly in the
                       password generator.
                     </Trans>
                   </p>
@@ -467,7 +467,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                 </span>
               </h4>
               <span className="input toggle-switch form-element">
-                <Trans>Allow passbolt to access external services to check if a password has been compromised.</Trans>
+                <Trans>Allow passly to access external services to check if a password has been compromised.</Trans>
               </span>
             </form>
           </div>
@@ -495,7 +495,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   <p>
                     <Trans>The current password configuration generates passwords that are not strong enough.</Trans>
                     <br />
-                    <Trans>Passbolt recommends a minimum of {{ minimalAdvisedEntropy }} bits to be safe.</Trans>
+                    <Trans>Passly recommends a minimum of {{ minimalAdvisedEntropy }} bits to be safe.</Trans>
                   </p>
                 </div>
               )}
@@ -506,7 +506,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                       The current passphrase configuration generates passphrases that are not strong enough.
                     </Trans>
                     <br />
-                    <Trans>Passbolt recommends a minimum of {{ minimalAdvisedEntropy }} bits to be safe.</Trans>
+                    <Trans>Passly recommends a minimum of {{ minimalAdvisedEntropy }} bits to be safe.</Trans>
                   </p>
                 </div>
               )}

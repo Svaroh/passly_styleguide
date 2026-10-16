@@ -438,14 +438,14 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>The passbolt config file is present</Trans>
+            <Trans>The passly config file is present</Trans>
           </span>
         );
       } else {
         return (
           <span className="healthcheck-warning">
             <TriangleAlertSVG />
-            <Trans>The passbolt config file is missing</Trans>
+            <Trans>The passly config file is missing</Trans>
             <Tooltip message={this.props.t("Copy config/passbolt.default.php to config/passbolt.php")}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
@@ -470,7 +470,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>PHP version is too low, passbolt need PHP 7.4 or higher</Trans>
+            <Trans>PHP version is too low, passly need PHP 7.4 or higher</Trans>
           </span>
         );
       }
@@ -563,7 +563,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>You must enable the gd or imagick extensions to use Passbolt</Trans>
+            <Trans>You must enable the gd or imagick extensions to use Passly</Trans>
             <Tooltip
               message={
                 <span>
@@ -595,7 +595,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>You must enable the intl extension to use Passbolt</Trans>
+            <Trans>You must enable the intl extension to use Passly</Trans>
             <Tooltip
               message={
                 <span>
@@ -627,7 +627,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>You must enable the mbstring extension to use Passbolt</Trans>
+            <Trans>You must enable the mbstring extension to use Passly</Trans>
             <Tooltip
               message={
                 <span>
@@ -1014,7 +1014,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>Using latest passbolt version ({{ version }})</Trans>
+            <Trans>Using latest passly version ({{ version }})</Trans>
           </span>
         );
       } else if (
@@ -1078,7 +1078,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-success">
             <HealthcheckSuccessSVG />
-            <Trans>Passbolt is configured to force SSL use</Trans>
+            <Trans>Passly is configured to force SSL use</Trans>
           </span>
         );
       } else {
@@ -1086,7 +1086,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-fail">
             <HealthcheckErrorSVG />
-            <Trans>Passbolt is not configured to force SSL use</Trans>
+            <Trans>Passly is not configured to force SSL use</Trans>
             <Tooltip message={<Trans>Set passbolt.ssl.force to true in {{ configurationFilePath }}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
@@ -1258,7 +1258,7 @@ class DisplayHealthcheckAdministration extends Component {
         return (
           <span className="healthcheck-warning">
             <TriangleAlertSVG />
-            <Trans>Using non-compiled Javascript. Passbolt will be slower</Trans>
+            <Trans>Using non-compiled Javascript. Passly will be slower</Trans>
             <Tooltip message={<Trans>Set passbolt.js.build in {{ configurationFilePath }}</Trans>}>
               <InfoSVG className="baseline svg-icon" />
             </Tooltip>
@@ -1690,7 +1690,7 @@ class DisplayHealthcheckAdministration extends Component {
         <div className="healthcheck-settings main-column">
           <div className="main-content">
             <h3>
-              <Trans>Passbolt API Status</Trans>
+              <Trans>Passly API Status</Trans>
             </h3>
             {isEndpointEnabled ? (
               renderHealthcheck()
@@ -1708,7 +1708,7 @@ class DisplayHealthcheckAdministration extends Component {
                 </h3>
                 <p>
                   <Trans>
-                    This page is available to help administrators diagnose if something is wrong with a passbolt
+                    This page is available to help administrators diagnose if something is wrong with a passly
                     installation and help keeping it secure.
                   </Trans>
                 </p>

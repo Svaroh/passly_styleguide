@@ -40,7 +40,7 @@ describe("ExportAccountToDesktop", () => {
       expect(page.title.textContent).toEqual("Welcome to the desktop app setup");
       expect(page.windowsStoreTitle.textContent).toEqual("Download the desktop app");
       expect(page.windowsStoreButton).toBeDefined();
-      expect(page.windowsStoreDescription.textContent).toEqual("Passbolt is available on the Windows store.");
+      expect(page.windowsStoreDescription.textContent).toEqual("Passly is available on the Windows store.");
       expect(page.downloadAccountTitle.textContent).toEqual("Transfer your account kit");
       expect(page.downloadAccountDescription.textContent).toEqual(
         "An account kit is required to transfer your profile and private key to the desktop app.",

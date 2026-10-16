@@ -65,7 +65,7 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
   });
 
   describe("Ensure the feature is running only under HTTPS", () => {
-    it("As LU I should see a message telling me the feature needs Passbolt to run under HTTPS", async () => {
+    it("As LU I should see a message telling me the feature needs Passly to run under HTTPS", async () => {
       expect.assertions(2);
       const context = defaultAppContext({
         userSettings: {

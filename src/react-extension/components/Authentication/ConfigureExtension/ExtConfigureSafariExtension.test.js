@@ -39,7 +39,7 @@ describe("As AN I should be able to see Safari extension configuration helper pa
 
     expect(page.exists()).toBeTruthy();
     // title
-    expect(page.title).toBe("Congratulations! Passbolt extension has been installed.");
+    expect(page.title).toBe("Congratulations! Passly extension has been installed.");
     // message
     expect(page.message).toBe(
       "Once the extension is installed, it must be allowed on every website, otherwise it won't work as expected. Learn more",

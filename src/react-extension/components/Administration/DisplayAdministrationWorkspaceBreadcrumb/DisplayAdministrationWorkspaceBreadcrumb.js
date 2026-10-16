@@ -107,7 +107,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY:
         return this.translate("Password Expiry");
       case AdministrationWorkspaceMenuTypes.HEALTHCHECK:
-        return this.translate("Passbolt API Status");
+        return this.translate("Passly API Status");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA:
         return this.translate("Encrypted Metadata");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY:

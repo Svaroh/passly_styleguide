@@ -1,11 +1,11 @@
 {
-  "name": "passbolt-styleguide",
+  "name": "passly-styleguide",
   "version": "6.1.0",
   "license": "AGPL-3.0",
-  "copyright": "Copyright 2023 Passbolt SA",
-  "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
-  "homepage": "https://www.passbolt.com",
-  "repository": "https://github.com/passbolt/passbolt_styleguide",
+  "copyright": "Copyright 2026 Svaroh / Passly",
+  "description": "Passly styleguide contains common styling assets used by the different sites, plugin, etc.",
+  "homepage": "https://github.com/Svaroh/passly_styleguide",
+  "repository": "https://github.com/Svaroh/passly_styleguide",
   "engines": {
     "node": ">=22.14.0",
     "npm": ">=10.9.2"

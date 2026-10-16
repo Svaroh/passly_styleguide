@@ -226,7 +226,7 @@ class CreateGpgKey extends Component {
       <div className="create-gpg-key">
         <h1>
           {this.props.displayAs === CreateGpgKeyVariation.SETUP && (
-            <Trans>Welcome to Passbolt, please select a passphrase!</Trans>
+            <Trans>Welcome to Passly, please select a passphrase!</Trans>
           )}
           {this.props.displayAs === CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY && (
             <Trans>Choose a new passphrase.</Trans>

@@ -80,7 +80,7 @@ describe("As AD I can see the administration menu", () => {
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToHealthcheck();
-    expect(page.menuSelected).toBe("Passbolt API Status");
+    expect(page.menuSelected).toBe("Passly API Status");
     expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
   });
 
@@ -194,7 +194,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.exists()).toBeTruthy();
       await page.goToHealthcheck();
       expect(page.healthCheck).toBeTruthy();
-      expect(page.menuSelected).toBe("Passbolt API Status");
+      expect(page.menuSelected).toBe("Passly API Status");
       expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
     });
 

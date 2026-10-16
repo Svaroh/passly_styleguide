@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.8.0
  */
-import { pgpKeys } from "passbolt-styleguide/test/fixture/pgpKeys/keys";
+import { pgpKeys } from "passly-styleguide/test/fixture/pgpKeys/keys";
 
 export const GpgkeyEntityFixtures = {
   default: {

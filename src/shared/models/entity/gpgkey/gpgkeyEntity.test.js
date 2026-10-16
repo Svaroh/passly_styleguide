@@ -13,8 +13,8 @@
  */
 import GpgkeyEntity from "./gpgkeyEntity";
 import { GpgkeyEntityFixtures } from "./gpgkeyEntity.test.fixtures";
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import EntitySchema from "passly-styleguide/src/shared/models/entity/abstract/entitySchema";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 
 describe("Gpgkey entity", () => {
   describe("GpgkeyEntity::getSchema", () => {
