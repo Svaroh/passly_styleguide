@@ -20,7 +20,7 @@ import Tabs from "../../../react-extension/components/Common/Tab/Tabs";
 import Tab from "../../../react-extension/components/Common/Tab/Tab";
 import ConfigurePassphraseGenerator from "../../../shared/components/GeneratePassword/ConfigurePassphraseGenerator";
 import ConfigurePasswordGenerator from "../../../shared/components/GeneratePassword/ConfigurePasswordGenerator";
-import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import { SecretGenerator, DEFAULT_GENERATOR_CONFIGURATION } from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
@@ -59,9 +59,27 @@ class GeneratePasswordPage extends React.Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
-    const generatorSettings = this.props.prepareResourceContext.getSettings();
+    const generatorSettings =
+      this.props.prepareResourceContext?.getSettings?.() || this.props.prepareResourceContext?.settings;
     const password = this.generatePassword(generatorSettings);
     this.setState({ generatorSettings, password });
+  }
+
+  /**
+   * Whenever the component has been updated
+   * @param prevProps
+   */
+  componentDidUpdate(prevProps) {
+    const prevSettings =
+      prevProps.prepareResourceContext?.getSettings?.() || prevProps.prepareResourceContext?.settings;
+    const currentSettings =
+      this.props.prepareResourceContext?.getSettings?.() || this.props.prepareResourceContext?.settings;
+    if (currentSettings && currentSettings !== prevSettings) {
+      if (!this.state.generatorSettings || !this.state.password) {
+        const password = this.generatePassword(currentSettings);
+        this.setState({ generatorSettings: currentSettings, password });
+      }
+    }
   }
 
   /**
@@ -94,7 +112,8 @@ class GeneratePasswordPage extends React.Component {
    * @param generator The generator configuration
    */
   handlePasswordGeneratorConfigurationChanged(generator) {
-    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    const currentSettings = this.state.generatorSettings || this.props.prepareResourceContext?.getSettings?.();
+    const settings = currentSettings ? JSON.parse(JSON.stringify(currentSettings)) : {};
     settings.password_generator_settings = generator;
     this.handleGeneratorConfigurationChanged(settings);
   }
@@ -104,7 +123,8 @@ class GeneratePasswordPage extends React.Component {
    * @param generator The generator configuration
    */
   handlePassphraseGeneratorConfigurationChanged(generator) {
-    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    const currentSettings = this.state.generatorSettings || this.props.prepareResourceContext?.getSettings?.();
+    const settings = currentSettings ? JSON.parse(JSON.stringify(currentSettings)) : {};
     settings.passphrase_generator_settings = generator;
     this.handleGeneratorConfigurationChanged(settings);
   }
@@ -114,7 +134,10 @@ class GeneratePasswordPage extends React.Component {
    * @param generatorConfiguration The generator configuration
    */
   handleGeneratorTypeChanged(generatorType) {
-    const generatorConfiguration = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    const currentSettings = this.state.generatorSettings || this.props.prepareResourceContext?.getSettings?.();
+    const generatorConfiguration = currentSettings
+      ? JSON.parse(JSON.stringify(currentSettings))
+      : { default_generator: generatorType };
     generatorConfiguration.default_generator = generatorType;
     this.handleGeneratorConfigurationChanged(generatorConfiguration);
   }
@@ -186,7 +209,12 @@ class GeneratePasswordPage extends React.Component {
    * @returns {string} the generated password
    */
   generatePassword(generatorConfiguration) {
-    const password = SecretGenerator.generate(generatorConfiguration);
+    const config =
+      generatorConfiguration ||
+      this.state?.generatorSettings ||
+      this.props.prepareResourceContext?.getSettings?.() ||
+      DEFAULT_GENERATOR_CONFIGURATION;
+    const password = SecretGenerator.generate(config);
     const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
     this.setState({ passwordEntropy });
     return password;
@@ -316,14 +344,15 @@ class GeneratePasswordPage extends React.Component {
               <PasswordComplexity entropy={this.state.passwordEntropy} />
             </div>
             {this.hasGeneratorConfiguration() && (
-              <Tabs activeTabName={generatorConfiguration.default_generator}>
+              <Tabs activeTabName={generatorConfiguration?.default_generator || "password"}>
                 <Tab
                   key={"password"}
                   name={this.props.t("password")}
                   type={"password"}
                   onClick={() => this.handleGeneratorTypeChanged("password")}
                 >
-                  {generatorConfiguration.default_generator === "password" && (
+                  {(!generatorConfiguration?.default_generator ||
+                    generatorConfiguration.default_generator === "password") && (
                     <ConfigurePasswordGenerator
                       configuration={generatorConfiguration.password_generator_settings}
                       onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}
