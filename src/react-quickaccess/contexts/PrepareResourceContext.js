@@ -92,9 +92,39 @@ function mergeSavedPassphraseGeneratorSettings(settings, savedSettings) {
   }
 }
 
+export const DEFAULT_GENERATOR_SETTINGS = {
+  default_generator: "password",
+  external_dictionary_check: true,
+  password_generator_settings: {
+    length: 18,
+    min_length: 8,
+    max_length: 128,
+    mask_upper: true,
+    mask_lower: true,
+    mask_digit: true,
+    mask_parenthesis: true,
+    mask_char1: true,
+    mask_char2: true,
+    mask_char3: true,
+    mask_char4: true,
+    mask_char5: true,
+    mask_emoji: false,
+    exclude_look_alike_chars: true,
+  },
+  passphrase_generator_settings: {
+    words: 9,
+    min_words: 4,
+    max_words: 40,
+    word_separator: " ",
+    word_case: "lowercase",
+  },
+  source: "default",
+};
+
 function applySavedGeneratorSettings(passwordPolicies, savedSettings) {
-  const settings = cloneGeneratorSettings(passwordPolicies);
-  if (!settings || !savedSettings || typeof savedSettings !== "object") {
+  const basePolicies = passwordPolicies || DEFAULT_GENERATOR_SETTINGS;
+  const settings = cloneGeneratorSettings(basePolicies) || cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS);
+  if (!savedSettings || typeof savedSettings !== "object") {
     return settings;
   }
 
@@ -115,13 +145,13 @@ function applySavedGeneratorSettings(passwordPolicies, savedSettings) {
  * Context related to prepare a resource ( name, url, username, password.)
  */
 export const PrepareResourceContext = React.createContext({
-  settings: null, // The current settings of generators
+  settings: cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS), // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
   resourcePrepared: null, // The resource prepared
   onPrepareResource: () => {}, // Whenever a resource has been prepared
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
   onGeneratorSettingsChanged: () => {}, // Whenever generator settings have been changed
-  getSettings: () => {}, // Whenever the settings must be get
+  getSettings: () => cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS), // Whenever the settings must be get
   consumePreparedResource: () => {}, // Whenever the prepared resource must be get
   resetSecretGeneratorSettings: () => {}, // reset the secret generator settings with the organisation's default
 });
@@ -144,7 +174,7 @@ class PrepareResourceContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      settings: null, // The current settings of generators
+      settings: cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS), // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       resourcePrepared: null, // The resource prepared
       getSettings: this.getSettings.bind(this), // returns the current generator settings
@@ -169,14 +199,17 @@ class PrepareResourceContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async resetSecretGeneratorSettings() {
-    const activeSession = this.props.activeSession || this.props.activeSessionLocalStorageContext?.get();
-    if (activeSession && !activeSession.isSessionOnline) {
-      return;
+    let passwordPolicies = null;
+    try {
+      if (this.props.passwordPoliciesContext?.loadPolicies) {
+        passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
+      }
+    } catch (e) {
+      console.warn("Could not load password policies", e);
     }
-    const passwordPolicies = await this.props.passwordPoliciesContext.loadPolicies();
     const savedSettings = await this.getSavedSecretGeneratorSettings();
     const settings = applySavedGeneratorSettings(passwordPolicies, savedSettings);
-    this.setState({ settings });
+    this.setState({ settings: settings || cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS) });
   }
 
   /**
@@ -184,15 +217,15 @@ class PrepareResourceContextProvider extends React.Component {
    * @returns {Promise<object|null>}
    */
   async getSavedSecretGeneratorSettings() {
-    const storage = this.props.context.storage?.local;
+    const storage = this.props.context?.storage?.local || this.props.storage?.local;
     if (!storage) {
       return null;
     }
 
     try {
-      const storageKey = getUserGeneratorSettingsStorageKey(this.props.context);
+      const storageKey = getUserGeneratorSettingsStorageKey(this.props.context || this.props);
       const storageData = await storage.get([storageKey]);
-      return storageData[storageKey] || null;
+      return storageData?.[storageKey] || null;
     } catch (error) {
       console.error(error);
       return null;
@@ -205,13 +238,13 @@ class PrepareResourceContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async saveSecretGeneratorSettings(generatorSettings) {
-    const storage = this.props.context.storage?.local;
+    const storage = this.props.context?.storage?.local || this.props.storage?.local;
     if (!storage || !generatorSettings) {
       return;
     }
 
     try {
-      const storageKey = getUserGeneratorSettingsStorageKey(this.props.context);
+      const storageKey = getUserGeneratorSettingsStorageKey(this.props.context || this.props);
       await storage.set({ [storageKey]: cloneGeneratorSettings(generatorSettings) });
     } catch (error) {
       console.error(error);

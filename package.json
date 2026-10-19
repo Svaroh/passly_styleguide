@@ -1,6 +1,6 @@
 {
   "name": "passly-styleguide",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2026 Svaroh / Passly",
   "description": "Passly styleguide contains common styling assets used by the different sites, plugin, etc.",

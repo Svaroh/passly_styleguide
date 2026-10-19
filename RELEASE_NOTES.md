@@ -1,13 +1,10 @@
-Passly Styleguide 6.1.0 introduces perpetual offline mode support, biometric passphrase authentication, recoverable trash operations, seamless offline routing, Passkey entity handling, and Passly branding.
+Passly Styleguide 6.1.1 includes fixes for QuickAccess password generator null-safety and generator settings initialization.
 
-## Highlights
+## [6.1.1] - 2026-10-19
 
-- **Perpetual Offline Mode**: Support for unlimited session duration, unlimited data retention, and unlimited offline item cache with automatic fallback when the server is unreachable.
-- **Biometric Unlock**: Updated InputPassphrase dialog with user profile header and biometric fingerprint / Touch ID authentication.
-- **Recoverable Trash & Restore**: Soft deletion and restoration workflows in workspace menus and contextual menus with localized confirmations.
-- **Seamless Offline Routing**: Instant offline readiness in QuickAccess and automatic routing to offline login or home without blocking on network requests.
-- **Passkey Support**: Full support for Passkey secret entities (v5) across vault dialogs and icons.
-- **Passly Branding & Localization**: Rebranded UI elements, logos, icons, and completed Ukrainian localization for offline mode and trash operations.
+### Fixed
+- Fix TypeError: Cannot read properties of null (reading 'default_generator') in QuickAccess
+- Provide default generator fallback settings and null guards in PrepareResourceContext, SecretGenerator, and GeneratePasswordPage
 
 ## [6.1.0] - 2026-10-15
 
