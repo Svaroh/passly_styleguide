@@ -51,15 +51,17 @@ export const SecretGenerator = {
    * @return {string} A generated secret
    */
   generate: (configuration) => {
-    const config = configuration || DEFAULT_GENERATOR_CONFIGURATION;
-    const type = config?.default_generator || "password";
+    if (!configuration) {
+      return "";
+    }
+    const type = configuration.default_generator || "password";
     if (type === "password") {
       const passwordSettings =
-        config.password_generator_settings || DEFAULT_GENERATOR_CONFIGURATION.password_generator_settings;
+        configuration.password_generator_settings || DEFAULT_GENERATOR_CONFIGURATION.password_generator_settings;
       return PasswordGenerator.generate(passwordSettings);
     } else if (type === "passphrase") {
       const passphraseSettings =
-        config.passphrase_generator_settings || DEFAULT_GENERATOR_CONFIGURATION.passphrase_generator_settings;
+        configuration.passphrase_generator_settings || DEFAULT_GENERATOR_CONFIGURATION.passphrase_generator_settings;
       return PassphraseGenerator.generate(passphraseSettings);
     }
     return "";

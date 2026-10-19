@@ -20,7 +20,7 @@ import Tabs from "../../../react-extension/components/Common/Tab/Tabs";
 import Tab from "../../../react-extension/components/Common/Tab/Tab";
 import ConfigurePassphraseGenerator from "../../../shared/components/GeneratePassword/ConfigurePassphraseGenerator";
 import ConfigurePasswordGenerator from "../../../shared/components/GeneratePassword/ConfigurePasswordGenerator";
-import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import { SecretGenerator, DEFAULT_GENERATOR_CONFIGURATION } from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import { withPrepareResourceContext } from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
@@ -209,7 +209,11 @@ class GeneratePasswordPage extends React.Component {
    * @returns {string} the generated password
    */
   generatePassword(generatorConfiguration) {
-    const config = generatorConfiguration || this.state?.generatorSettings;
+    const config =
+      generatorConfiguration ||
+      this.state?.generatorSettings ||
+      this.props.prepareResourceContext?.getSettings?.() ||
+      DEFAULT_GENERATOR_CONFIGURATION;
     const password = SecretGenerator.generate(config);
     const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
     this.setState({ passwordEntropy });

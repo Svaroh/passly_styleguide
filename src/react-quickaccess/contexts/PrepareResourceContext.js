@@ -145,7 +145,7 @@ function applySavedGeneratorSettings(passwordPolicies, savedSettings) {
  * Context related to prepare a resource ( name, url, username, password.)
  */
 export const PrepareResourceContext = React.createContext({
-  settings: cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS), // The current settings of generators
+  settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
   resourcePrepared: null, // The resource prepared
   onPrepareResource: () => {}, // Whenever a resource has been prepared
@@ -174,7 +174,7 @@ class PrepareResourceContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      settings: cloneGeneratorSettings(DEFAULT_GENERATOR_SETTINGS), // The current settings of generators
+      settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       resourcePrepared: null, // The resource prepared
       getSettings: this.getSettings.bind(this), // returns the current generator settings
