@@ -206,7 +206,7 @@ class AdministrationHomePage extends React.PureComponent {
       {
         icon: <LDAPSVG />,
         title: this.props.t("Users Directory"),
-        description: this.props.t("Configure the synchronisation of users and groups with passbolt."),
+        description: this.props.t("Configure the synchronisation of users and groups with passly."),
         redirectTo: this.isCommunityEdition()
           ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing
           : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested,
@@ -268,7 +268,7 @@ class AdministrationHomePage extends React.PureComponent {
       {
         icon: <HeartPulseSVG />,
         title: this.props.t("API Status"),
-        description: this.props.t("Monitor the passbolt API's health and responsiveness."),
+        description: this.props.t("Monitor the passly API's health and responsiveness."),
         redirectTo: this.props.navigationContext.onGoToAdministrationHealthcheckRequested,
         flag: AdministrationWorkspaceMenuTypes.HEALTHCHECK,
       },

@@ -160,8 +160,8 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
               </h4>
               <span className="input toggle-switch form-element">
                 <Trans>
-                  Allow passbolt to access external services to check if the user passphrase has been compromised when
-                  the user creates it.
+                  Allow passly to access external services to check if the user passphrase has been compromised when the
+                  user creates it.
                 </Trans>
               </span>
             </form>
@@ -179,8 +179,8 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
                 <div id="user-passphrase-policies-weak-settings-banner">
                   <p>
                     <Trans>
-                      Passbolt recommends passphrase strength to be at minimum of {{ MINIMAL_ADVISED_ENTROPY }} bits to
-                      be safe.
+                      Passly recommends passphrase strength to be at minimum of {{ MINIMAL_ADVISED_ENTROPY }} bits to be
+                      safe.
                     </Trans>
                   </p>
                 </div>

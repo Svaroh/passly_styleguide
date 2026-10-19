@@ -392,7 +392,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
             </h3>
             <p>
               <Trans>
-                User self registration enables users with an email from a whitelisted domain to create their passbolt
+                User self registration enables users with an email from a whitelisted domain to create their passly
                 account without prior admin invitation.
               </Trans>
             </p>

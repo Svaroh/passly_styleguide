@@ -130,13 +130,13 @@ class DisplayChangePassphraseIntroduction extends React.Component {
               <Trans>Changing your passphrase will only update it on your current device and browser profile.</Trans>
               &nbsp;
               <Trans>
-                If you use Passbolt on multiple browsers or devices, you’ll need to update the passphrase on each one
+                If you use Passly on multiple browsers or devices, you’ll need to update the passphrase on each one
                 individually.
               </Trans>
               <br />
               <br />
               <Trans>
-                Whenever you change your passphrase, Passbolt automatically creates a new key backup encrypted with the
+                Whenever you change your passphrase, Passly automatically creates a new key backup encrypted with the
                 updated passphrase.
               </Trans>
               &nbsp;

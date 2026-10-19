@@ -135,7 +135,7 @@ class DisplayInternationalizationAdministration extends React.Component {
             </h3>
             <p>
               <Trans>
-                Your language is missing or you discovered an error in the translation, help us to improve passbolt.
+                Your language is missing or you discovered an error in the translation, help us to improve passly.
               </Trans>
             </p>
             <a

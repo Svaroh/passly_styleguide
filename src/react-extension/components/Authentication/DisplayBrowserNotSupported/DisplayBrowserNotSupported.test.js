@@ -81,7 +81,7 @@ describe("As AN I should see not supported browser page", () => {
       // title
       expect(page.title).toBe("Sorry, your browser is not supported.");
       // message
-      expect(page.message).toBe("Please download one of these browsers to get started with passbolt:");
+      expect(page.message).toBe("Please download one of these browsers to get started with passly:");
       for (let i = 0; i < browserInfo.length; i++) {
         await page.clickOnBrowserButton(i);
         // download

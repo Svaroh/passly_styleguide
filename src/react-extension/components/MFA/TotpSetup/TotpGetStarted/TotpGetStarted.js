@@ -69,7 +69,7 @@ class TotpGetStarted extends Component {
               <div className="step sign-in-illustration">
                 <TotpSignInIllustration />
                 <p>
-                  <Trans>You sign in to passbolt just like you normally do.</Trans>
+                  <Trans>You sign in to passly just like you normally do.</Trans>
                 </p>
               </div>
               <div className="step phone-illustration">

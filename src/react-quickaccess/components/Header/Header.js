@@ -68,7 +68,7 @@ class Header extends React.Component {
             href={this.props.context.userSettings ? this.props.context.userSettings.getTrustedDomain() : "#"}
             target="_blank"
             rel="noopener noreferrer"
-            title={this.translate("open passbolt in a new tab")}
+            title={this.translate("open passly in a new tab")}
           >
             <LogoSVG role="img" width="10rem" height="1.8rem" />
           </a>

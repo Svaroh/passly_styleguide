@@ -3,9 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: passbolt-styleguide-devcontainer
+    container_name: passly-styleguide-devcontainer
     volumes:
-      - ..:/workspaces/passbolt-styleguide:cached
+      - ..:/workspaces/passly-styleguide:cached
       - ${HOME}/.claude:/home/node/.claude:cached
       - ${HOME}/.claude/managed-settings:/etc/claude-code:ro
     command: sleep infinity

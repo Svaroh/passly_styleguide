@@ -1306,7 +1306,7 @@ class DisplayAdministrationMenu extends React.Component {
                       <div className="main-cell">
                         <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
                           <span>
-                            <Trans>Passbolt API Status</Trans>
+                            <Trans>Passly API Status</Trans>
                           </span>
                         </button>
                       </div>

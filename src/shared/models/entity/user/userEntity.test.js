@@ -14,7 +14,7 @@
 import UserEntity, { USER_STATUS } from "./userEntity";
 import EntitySchema from "../abstract/entitySchema";
 import { defaultUserDto } from "../user/userEntity.test.data";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import RoleEntity from "../role/roleEntity";
 import ProfileEntity from "../profile/profileEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";

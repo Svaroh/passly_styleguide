@@ -284,7 +284,7 @@ class PingOneSsoProviderForm extends PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
           )}
           <p>
-            <Trans>Allows PingOne and Passbolt API to securely share information.</Trans>{" "}
+            <Trans>Allows PingOne and Passly API to securely share information.</Trans>{" "}
             <a
               href="https://docs.pingidentity.com/pingone/applications/p1_edit_application_oidc.html"
               rel="noopener noreferrer"
@@ -308,7 +308,7 @@ class PingOneSsoProviderForm extends PureComponent {
             disabled
           />
           <p>
-            <Trans>Defines which PingOne field needs to be used as Passbolt username.</Trans>
+            <Trans>Defines which PingOne field needs to be used as Passly username.</Trans>
           </p>
         </div>
         <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
@@ -330,7 +330,7 @@ class PingOneSsoProviderForm extends PureComponent {
             <div className="error-message">{this.displayErrors(errors.getError("email_claim"))}</div>
           )}
           <p>
-            <Trans>Defines which PingOne field needs to be used as Passbolt username.</Trans>
+            <Trans>Defines which PingOne field needs to be used as Passly username.</Trans>
           </p>
         </div>
       </>

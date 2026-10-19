@@ -12,7 +12,7 @@
  * @since         5.2.0
  */
 
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
+import EntitySchema from "passly-styleguide/src/shared/models/entity/abstract/entitySchema";
 import ShareMetadataPrivateKeysCollection from "./shareMetadataPrivateKeysCollection";
 import {
   defaultMinimalShareMetadataPrivateKeysDtos,
@@ -21,7 +21,7 @@ import {
   shareMetadataPrivateKeysWithEncryptedKeyDtos,
   shareMetadataPrivateKeysWithSameMetadataKeyIdUserIdDtos,
 } from "./shareMetadataPrivateKeysCollection.test.data";
-import MetadataPrivateKeyEntity from "passbolt-styleguide/src/shared/models/entity/metadata/metadataPrivateKeyEntity";
+import MetadataPrivateKeyEntity from "passly-styleguide/src/shared/models/entity/metadata/metadataPrivateKeyEntity";
 
 describe("ShareMetadataPrivateKeysCollection", () => {
   describe("::getSchema", () => {

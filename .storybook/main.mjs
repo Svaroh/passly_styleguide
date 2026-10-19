@@ -20,7 +20,7 @@ const config = {
 
   env: (config) => ({
     ...config,
-    ORIGIN_URL: "https://passbolt.github.io/passbolt_styleguide",
+    ORIGIN_URL: "https://svaroh.github.io/passly_styleguide",
   }),
 
   framework: {

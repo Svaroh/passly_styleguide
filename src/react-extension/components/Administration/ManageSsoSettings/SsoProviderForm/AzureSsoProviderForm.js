@@ -346,7 +346,7 @@ class AzureSsoProviderForm extends React.Component {
             <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
           )}
           <p>
-            <Trans>Allows Azure and Passbolt API to securely share information.</Trans>{" "}
+            <Trans>Allows Azure and Passly API to securely share information.</Trans>{" "}
             <a
               href="https://learn.microsoft.com/en-us/azure/marketplace/create-or-update-client-ids-and-secrets#add-a-client-id-and-client-secret"
               rel="noopener noreferrer"
@@ -413,7 +413,7 @@ class AzureSsoProviderForm extends React.Component {
                 onChange={this.handleInputChange}
               />
               <p>
-                <Trans>Defines which Azure field needs to be used as Passbolt username.</Trans>
+                <Trans>Defines which Azure field needs to be used as Passly username.</Trans>
               </p>
             </div>
             {ssoConfig.email_claim === "upn" && (
@@ -430,8 +430,8 @@ class AzureSsoProviderForm extends React.Component {
               <div className="warning message">
                 <div>
                   <Trans>
-                    <b>Warning</b>: using Azure email field to map with Passbolt username is generally unsafe (see.
-                    noauth vulnerability class).
+                    <b>Warning</b>: using Azure email field to map with Passly username is generally unsafe (see. noauth
+                    vulnerability class).
                   </Trans>
                 </div>
               </div>
@@ -466,9 +466,7 @@ class AzureSsoProviderForm extends React.Component {
                   id="login_hint-input"
                 />
                 <label htmlFor="login_hint-input">
-                  <Trans>
-                    If checked, users signing in with Microsoft Azure must use their Passbolt email address.
-                  </Trans>
+                  <Trans>If checked, users signing in with Microsoft Azure must use their Passly email address.</Trans>
                 </label>
               </div>
             </div>

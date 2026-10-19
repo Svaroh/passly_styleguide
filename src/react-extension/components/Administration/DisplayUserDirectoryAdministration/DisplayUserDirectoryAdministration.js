@@ -340,7 +340,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
               <>
                 <p className="description">
                   <Trans>
-                    A Users Directory is configured. The users and groups of passbolt will synchronize with it.
+                    A Users Directory is configured. The users and groups of passly will synchronize with it.
                   </Trans>
                 </p>
                 <div className={`accordion section-general ${settings.openCredentials ? "" : "closed"}`}>
@@ -768,7 +768,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                             disabled={this.hasAllInputDisabled()}
                           />
                           <div className="help-message">
-                            <Trans>Directory group&apos;s users field to map to Passbolt group&apos;s field.</Trans>
+                            <Trans>Directory group&apos;s users field to map to Passly group&apos;s field.</Trans>
                           </div>
                           {errors.fieldsMappingOpenLdapGroupUsersError && isSubmitted && (
                             <div id="field-mapping-openldap-group-users-input-feedback" className="error-message">
@@ -796,7 +796,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         />
                         <div className="help-message">
                           <Trans>
-                            Directory user&apos;s username field to map to Passbolt user&apos;s username field.
+                            Directory user&apos;s username field to map to Passly user&apos;s username field.
                           </Trans>
                         </div>
                         {errors.fieldsMappingAdUserUsernameError && isSubmitted && (
@@ -1095,7 +1095,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                             </span>
                             <span className="info">
                               <Trans>
-                                Suspend the users, preventing them from signing in to Passbolt and from receiving email
+                                Suspend the users, preventing them from signing in to Passly and from receiving email
                                 notifications.
                               </Trans>
                               &nbsp;
@@ -1139,8 +1139,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div>
                       <p className="description">
                         <Trans>
-                          No Users Directory is configured. Enable it to synchronise your users and groups with
-                          passbolt.
+                          No Users Directory is configured. Enable it to synchronise your users and groups with passly.
                         </Trans>
                       </p>
                     </div>

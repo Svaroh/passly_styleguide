@@ -23,13 +23,13 @@ class Intro extends Component {
       <div className="storybook-intro-hero">
         <link rel="stylesheet" href={`stories/assets/intro/intro.css`}/>
         <div className="storybook-intro-hero-left">
-          <h1><img src="img/logo/logo.svg" alt="Passbolt logo"/></h1>
+          <h1><img src="img/logo/logo.svg" alt="Passly logo"/></h1>
           <p className="storybook-intro-hero-subtitle">
-            Welcome to passbolt user interface design kit.
+            Welcome to Passly user interface design kit.
           </p>
           <div className="storybook-intro-hero-actions">
-            <a target="_blank" rel="noopener noreferrer" href="https://passbolt.com" className="button primary">Visit our website</a>
-            <a target="_blank" rel="noopener noreferrer" href="https://github.com/passbolt" className="button secondary">Follow on github</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://passly.svaroh.net" className="button primary">Visit our website</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/Svaroh" className="button secondary">Follow on github</a>
           </div>
         </div>
         <div className="storybook-intro-hero-right">

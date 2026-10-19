@@ -14,7 +14,7 @@
 import SiteSettingsEntity from "./siteSettingsEntity";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
+import * as assertEntityProperty from "passly-styleguide/test/assert/assertEntityProperty";
 import { defaultCeSiteSettings, defaultProSiteSettings } from "./siteSettingsEntity.test.data";
 
 describe("SiteSettingsEntity", () => {

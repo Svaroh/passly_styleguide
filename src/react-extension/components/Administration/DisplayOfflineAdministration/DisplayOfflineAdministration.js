@@ -312,7 +312,7 @@ class DisplayOfflineAdministration extends Component {
               </h3>
               <p className="description">
                 <Trans>
-                  Enable read-only access to critical credentials when the Passbolt server is unreachable or network
+                  Enable read-only access to critical credentials when the Passly server is unreachable or network
                   connectivity is unavailable.
                 </Trans>
               </p>

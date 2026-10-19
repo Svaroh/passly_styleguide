@@ -1,16 +1,14 @@
-	      ____                  __          ____
-	     / __ \____  _____ ____/ /_  ____  / / /_
-	    / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
-	   / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
-	  /_/    \__,_/____/____/_.___/\____/_/\__/
+# Passly Styleguide
 
-	Open source password manager for teams
-	(c) 2026 Passbolt SA
-	https://www.passbolt.com
+Passly styleguide gathers the UI code shared across Passly's applications: the browser extension, the desktop application, and the web application served by the API.
+
+This repository is a Svaroh-maintained fork of `passbolt/passbolt_styleguide`.
+The fork keeps the upstream AGPL license, copyright notices, and Passbolt trademark
+notice intact while using Passly as the product name for Svaroh builds.
 
 ## License
 
-Passbolt - Open source password manager for teams
+Passly styleguide, based on Passbolt.
 
 (c) 2026 Passbolt SA
 
@@ -27,29 +25,28 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See GNU Affero 
 You should have received a copy of the GNU Affero General Public License along with this program. If not,
 see [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html).
 
-## About passbolt
+## About Passly
 
-Passbolt is an open source password manager for teams. It allows to securely share and store credentials.
+Passly is an open source password manager for teams. It allows to securely share and store credentials.
 For instance, the wifi password of your office, or the administrator password of a router, or your organisation social
-media account password, all of them can be secured using Passbolt.
+media account password, all of them can be secured using Passly.
 
-You can try a demo of passbolt at [https://demo.passbolt.com](https://demo.passbolt.com).
+The upstream Passbolt project provides a public demo at [https://demo.passbolt.com](https://demo.passbolt.com).
 
-You will need to install a plugin, you can find a step by step guide in the website
-[help section](https://www.passbolt.com/help/start/firefox)
+The upstream setup guide remains available in the [help section](https://www.passbolt.com/help/start/firefox).
 
 Or, of course, you can use the code in this repository to build it yourself and run it!
 
-## About passbolt styleguide
+## About Passly styleguide
 
-The styleguide gathers the UI code shared across passbolt's applications: the browser extension, the desktop application,
+The styleguide gathers the UI code shared across Passly's applications: the browser extension, the desktop application,
 and the web application served by the API.
 
 # Contributing
 
 ## Reporting a security Issue
 
-If you've found a security related issue in Passbolt, please don't open an issue on GitHub. Follow our responsible disclosure process: https://www.passbolt.com/docs/contribute/security/vulnerability/.
+If you've found a security related issue in Passly, please don't open an issue on GitHub. Follow our responsible disclosure process: https://github.com/Svaroh/passly_styleguide/security/advisories.
 
 Install
 =========
@@ -112,10 +109,10 @@ npm publish --tag alpha
 
 Upgrade the version of the styleguide in your project.
 ```
-npm upgrade passbolt-styleguide
+npm upgrade passly-styleguide
 ```
 
-In some passbolt projects an additional grunt task help you manage the deployment of the styleguide assets
+In some Passly projects an additional grunt task help you manage the deployment of the styleguide assets
 ```
 grunt styleguide-update
 ```

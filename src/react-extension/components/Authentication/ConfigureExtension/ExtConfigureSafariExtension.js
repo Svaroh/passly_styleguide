@@ -100,7 +100,7 @@ class ExtConfigureSafariExtension extends React.Component {
     return (
       <div className="install-extension">
         <h1>
-          <Trans>Congratulations! Passbolt extension has been installed.</Trans>
+          <Trans>Congratulations! Passly extension has been installed.</Trans>
         </h1>
         <p>
           <Trans>

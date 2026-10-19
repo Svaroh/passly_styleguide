@@ -1,9 +1,9 @@
 // @see: https://containers.dev/implementors/json_reference/#general-properties
 {
-  "name": "[passbolt-styleguide] Devcontainer",
+  "name": "[passly-styleguide] Devcontainer",
   "dockerComposeFile": "docker-compose.yml",
   "service": "devcontainer",
-  "workspaceFolder": "/workspaces/passbolt-styleguide",
+  "workspaceFolder": "/workspaces/passly-styleguide",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
   },

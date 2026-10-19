@@ -50,7 +50,7 @@ describe("TotpGetStarted", () => {
       await page.clickOnCancelButton();
       expect(page.totpSignInIllustation).not.toBeNull();
       expect(page.totpSignInIllustationDescription.textContent).toEqual(
-        "You sign in to passbolt just like you normally do.",
+        "You sign in to passly just like you normally do.",
       );
       expect(page.totpPhoneIllustation).not.toBeNull();
       expect(page.totpPhoneIllustationDescription.textContent).toEqual(

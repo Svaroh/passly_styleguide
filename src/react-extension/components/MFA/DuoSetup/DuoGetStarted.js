@@ -116,7 +116,7 @@ class DuoGetStarted extends Component {
               <div className="step sign-in-illustration">
                 <DuoSignInIllustration />
                 <p>
-                  <Trans>You sign in to passbolt just like you normally do.</Trans>
+                  <Trans>You sign in to passly just like you normally do.</Trans>
                 </p>
               </div>
               <div className="step push-notifcation">
