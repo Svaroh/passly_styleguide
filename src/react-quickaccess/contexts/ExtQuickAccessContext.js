@@ -26,7 +26,6 @@ import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
 import LogoSVG from "../../img/svg/logo.svg";
 import SiteSettingsServiceWorkerService from "../../shared/services/serviceWorker/siteSettings/siteSettingsServiceWorkerService";
 import { Trans } from "react-i18next";
-
 /**
  * The ExtApp context provider
  */
@@ -124,7 +123,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
       }
       this.setState({
         hasError: true,
-        errorMessage: e.message,
+        errorMessage: "Не вдалося завантажити сесію Passly",
       });
     }
   }
@@ -187,9 +186,6 @@ export class ExtQuickAccessContextProvider extends React.Component {
     }
   }
 
-  /**
-   * Bind callbacks
-   */
   bindCallbacks() {
     this.updateSearch = this.updateSearch.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -443,7 +439,9 @@ export class ExtQuickAccessContextProvider extends React.Component {
               {this.state.hasError && (
                 <div className="processing-wrapper">
                   <p className="processing-text">
-                    <Trans>{this.state.errorMessage}</Trans>
+                    <Trans i18nKey="Session load error">
+                      {this.state.errorMessage || "Не вдалося завантажити сесію Passly"}
+                    </Trans>
                   </p>
                 </div>
               )}
