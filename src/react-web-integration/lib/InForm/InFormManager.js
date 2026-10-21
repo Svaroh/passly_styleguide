@@ -115,7 +115,6 @@ class InFormManager {
     await this.waitingAnimations(document.body);
     // Do not initialize if the page is not visible enough before inserting elements
     if (this.isPageNotVisible()) {
-      console.debug("Cannot insert the in-form menu manager into a page that is not visible.");
       return;
     }
 
@@ -416,7 +415,6 @@ class InFormManager {
           this.retryMountHost(attempt + 1);
         } else {
           // Otherwise, destroy the host
-          console.debug("Someone has moved the host of the shadow root");
           this.destroy();
         }
       }

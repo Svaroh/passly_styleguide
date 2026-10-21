@@ -2186,5 +2186,8 @@
   "You must enable the mbstring extension to use Passly": "Щоб використовувати Passly потрібно увімкнути розширення mbstring",
   "You sign in to passly just like you normally do.": "Ви входите в Passly, як зазвичай.",
   "Your browser is not configured to work with this passly instance.": "Ваш браузер не налаштований для роботи з цим екземпляром Passly.",
-  "Your language is missing or you discovered an error in the translation, help us to improve passly.": "Ваша мова відсутня або ви виявили помилку в перекладі, допоможіть нам покращити Passly."
+  "Your language is missing or you discovered an error in the translation, help us to improve passly.": "Ваша мова відсутня або ви виявили помилку в перекладі, допоможіть нам покращити Passly.",
+  "Unlimited": "Без обмежень",
+  "Session load error": "Не вдалося завантажити сесію Passly",
+  "An error occurred while loading quick access": "Виникла помилка під час завантаження швидкого доступу"
 }
