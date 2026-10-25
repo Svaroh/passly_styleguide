@@ -39,6 +39,14 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The container element.
+   * @returns {Element}
+   */
+  get container() {
+    return this._page.container;
+  }
+
+  /**
    * Returns true if the page is loaded.
    * @returns {boolean}
    */

@@ -286,4 +286,74 @@ describe("ResourceViewPage", () => {
       expect(page.listUris.length).toStrictEqual(4);
     });
   });
+
+  describe("Vault navigation and delete actions", () => {
+    it("Should request passbolt.tabs.open-vault-page when opening resource in vault", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const requestMock = mockContextRequest(props.context, () => Promise.resolve());
+      const windowCloseSpy = jest.spyOn(window, "close").mockImplementation(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      const resourceId = props.context.storage.local.get(["resources"]).resources[0].id;
+      const viewLink = page.container.querySelector(`a[title="View in the vault"]`);
+      expect(viewLink).not.toBeNull();
+
+      await page.click(viewLink);
+      expect(requestMock).toHaveBeenCalledWith("passbolt.tabs.open-vault-page", {
+        pathname: `/app/passwords/view/${resourceId}`,
+        action: null,
+      });
+      windowCloseSpy.mockRestore();
+    });
+
+    it("Should request passbolt.tabs.open-vault-page with edit action when editing in vault", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const requestMock = mockContextRequest(props.context, () => Promise.resolve());
+      const windowCloseSpy = jest.spyOn(window, "close").mockImplementation(() => {});
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      const resourceId = props.context.storage.local.get(["resources"]).resources[0].id;
+      const editLink = page.container.querySelector(`a[title="Edit in the vault"]`);
+      expect(editLink).not.toBeNull();
+
+      await page.click(editLink);
+      expect(requestMock).toHaveBeenCalledWith("passbolt.tabs.open-vault-page", {
+        pathname: `/app/passwords/view/${resourceId}`,
+        action: "edit",
+      });
+      windowCloseSpy.mockRestore();
+    });
+
+    it("Should open delete dialog and request passbolt.resources.delete-all on confirm", async () => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const requestMock = mockContextRequest(props.context, () => Promise.resolve());
+      props.history = { replace: jest.fn() };
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+
+      const resourceId = props.context.storage.local.get(["resources"]).resources[0].id;
+      const deleteButton = page.container.querySelector(`a[title="Delete"]`);
+      expect(deleteButton).not.toBeNull();
+
+      await page.click(deleteButton);
+      const dialog = page.container.querySelector(".delete-password-dialog");
+      expect(dialog).not.toBeNull();
+
+      const submitButton = dialog.querySelector("button[type=submit]");
+      await page.click(submitButton);
+
+      expect(requestMock).toHaveBeenCalledWith("passbolt.resources.delete-all", [resourceId]);
+    });
+  });
 });
