@@ -504,11 +504,24 @@ class ResourceViewPage extends React.Component {
    * @returns {Promise<void>}
    */
   async openInVault(action = null) {
-    await this.props.context.port.request("passbolt.tabs.open-vault-page", {
-      pathname: `/app/passwords/view/${this.props.match.params.id}`,
-      action,
-    });
-    window.close();
+    try {
+      await this.props.context.port.request("passbolt.tabs.open-vault-page", {
+        pathname: `/app/passwords/view/${this.props.match.params.id}`,
+        action,
+      });
+      window.close();
+    } catch (error) {
+      console.error(error);
+      const domain = this.props.context?.userSettings?.getTrustedDomain?.();
+      if (domain) {
+        const url = new URL(`${domain.replace(/\/*$/, "")}/app/passwords/view/${this.props.match.params.id}`);
+        if (action) {
+          url.searchParams.set("action", action);
+        }
+        window.open(url.toString(), "_blank", "noopener,noreferrer");
+      }
+      window.close();
+    }
   }
 
   handleDeleteResourceClick(event) {
@@ -528,9 +541,14 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
+    const resourceId = this.state.resource?.id || this.props.match?.params?.id;
+    if (!resourceId) {
+      return;
+    }
+
     this.setState({ deletingResource: true, deleteError: "" });
     try {
-      await this.props.context.port.request("passbolt.resources.delete-all", [this.state.resource.id]);
+      await this.props.context.port.request("passbolt.resources.delete-all", [resourceId]);
       this.props.history.replace("/webAccessibleResources/quickaccess/home");
     } catch (error) {
       console.error(error);
