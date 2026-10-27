@@ -52,7 +52,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
         credential_id: {
           type: "string",
           maxLength: 8192,
-          pattern: /^[\w-]+$/,
+          pattern: /^[A-Za-z0-9_-]+$/,
         },
         rp_id: {
           type: "string",
@@ -66,7 +66,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
         user_handle: {
           type: "string",
           maxLength: 8192,
-          pattern: /^[\w-]+$/,
+          pattern: /^[A-Za-z0-9_-]+$/,
         },
         user_name: {
           type: "string",
@@ -84,12 +84,12 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
         public_key_cose: {
           type: "string",
           maxLength: 8192,
-          pattern: /^[\w-]+$/,
+          pattern: /^[A-Za-z0-9_-]+$/,
         },
         private_key_pkcs8: {
           type: "string",
           maxLength: 8192,
-          pattern: /^[\w-]+$/,
+          pattern: /^[A-Za-z0-9_-]+$/,
         },
         aaguid: {
           type: "string",

@@ -76,6 +76,62 @@ import OfflineSettingsLocalStorageContextProvider from "../shared/context/offlin
 import RoleContextProvider from "./contexts/RoleContext";
 import ExportPoliciesSettingsContextProvider from "./contexts/ExportPoliciesSettingsContext";
 
+class ExtAppErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ExtApp ErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          style={{
+            padding: "32px",
+            color: "#ececec",
+            background: "#1c1c1c",
+            minHeight: "100vh",
+            fontFamily: "sans-serif",
+          }}
+        >
+          <h2>The vault could not start</h2>
+          <p>{this.state.error?.message || "An unexpected error occurred."}</p>
+          <button
+            type="button"
+            style={{
+              padding: "8px 16px",
+              cursor: "pointer",
+              marginTop: "16px",
+              background: "#333",
+              color: "#fff",
+              border: "1px solid #555",
+            }}
+            onClick={() => {
+              this.setState({ hasError: false, error: null });
+              window.location.reload();
+            }}
+          >
+            Reload
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+ExtAppErrorBoundary.propTypes = {
+  children: PropTypes.any,
+};
+
 /**
  * The passbolt application served by the browser extension.
  * Briefly it takes care of:
@@ -87,7 +143,8 @@ class ExtApp extends Component {
   render() {
     const accountRecoveryUserService = new ExtAppAccountRecoveryUserService(this.props.port);
     return (
-      <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
+      <ExtAppErrorBoundary>
+        <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
         <AppContext.Consumer>
           {(appContext) => (
             <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
@@ -314,6 +371,7 @@ class ExtApp extends Component {
           )}
         </AppContext.Consumer>
       </ExtAppContextProvider>
+    </ExtAppErrorBoundary>
     );
   }
 }

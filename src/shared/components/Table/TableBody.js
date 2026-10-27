@@ -21,7 +21,7 @@ import { withTable } from "./Context/TableContext";
 class TableBody extends Component {
   /**
    * Get table style width
-   * @return {{width: string}}
+   * @return {{MozUserSelect: string, WebkitUserSelect: string, msUserSelect: string, width: string, minWidth: string}}
    */
   get tableBodyStyle() {
     return {
@@ -29,6 +29,7 @@ class TableBody extends Component {
       WebkitUserSelect: "none",
       msUserSelect: "none",
       width: `${this.props.tableContext.tableWidth}px`,
+      minWidth: "100%",
     };
   }
 

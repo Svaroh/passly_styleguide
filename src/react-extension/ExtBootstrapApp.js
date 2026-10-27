@@ -68,9 +68,15 @@ class ExtBootstrapApp extends Component {
    * Using UserSettings
    */
   async getUserSettings() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({ userSettings });
+    try {
+      const storageData = await this.props.storage.local.get(["_passbolt_data"]);
+      const config = storageData?._passbolt_data?.config || {};
+      const userSettings = new UserSettings(config);
+      this.setState({ userSettings });
+    } catch (error) {
+      console.warn("Could not load user settings in bootstrap, fallback to default", error);
+      this.setState({ userSettings: new UserSettings({}) });
+    }
   }
 
   /**
@@ -86,9 +92,16 @@ class ExtBootstrapApp extends Component {
    * @returns {string}
    */
   get basename() {
-    const trustedDomain = this.state.userSettings.getTrustedDomain();
-    const urlTrustedDomain = new URL(trustedDomain);
-    return urlTrustedDomain.pathname;
+    try {
+      const trustedDomain = this.state.userSettings?.getTrustedDomain?.();
+      if (!trustedDomain) {
+        return "/";
+      }
+      const urlTrustedDomain = new URL(trustedDomain);
+      return urlTrustedDomain.pathname || "/";
+    } catch {
+      return "/";
+    }
   }
 
   render() {
@@ -154,6 +167,10 @@ class ExtBootstrapApp extends Component {
                   "/",
                 ]}
               >
+                <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+                <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+              </Route>
+              <Route path="*">
                 <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
                 <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
               </Route>

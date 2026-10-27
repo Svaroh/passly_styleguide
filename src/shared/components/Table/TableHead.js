@@ -22,10 +22,13 @@ import RowHeader from "./RowHeader";
 class TableHead extends Component {
   /**
    * Get table style width
-   * @return {{width: string}}
+   * @return {{width: string, minWidth: string}}
    */
   get tableStyleWidth() {
-    return { width: `${this.props.tableContext.tableWidth}px` };
+    return {
+      width: `${this.props.tableContext.tableWidth}px`,
+      minWidth: "100%",
+    };
   }
 
   /**
