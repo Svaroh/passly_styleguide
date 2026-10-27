@@ -87,6 +87,23 @@ export default class TableContextProvider extends Component {
    */
   componentDidMount() {
     this.prepareTableColumns(this.state.columns);
+    this.handleWindowResize = () => {
+      if (this.tableviewRef?.current) {
+        this.recomputeTableWidth(this.state.columns);
+      }
+    };
+    window.addEventListener("resize", this.handleWindowResize);
+  }
+
+  /**
+   * ComponentWillUnmount
+   * Cleanup event listeners
+   * @return {void}
+   */
+  componentWillUnmount() {
+    if (this.handleWindowResize) {
+      window.removeEventListener("resize", this.handleWindowResize);
+    }
   }
 
   /**

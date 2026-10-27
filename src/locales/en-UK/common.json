@@ -1326,6 +1326,7 @@
   "Serving the compiled version of the javascript app": "Serving the compiled version of the javascript app",
   "Session duration": "Session duration",
   "Session Expired": "Session Expired",
+  "Session load error": "<0></0>",
   "Set an expiry date_one": "Set an expiry date",
   "Set an expiry date_other": "Set expiry dates",
   "Set debug = false; in {{configurationFilePath}}": "Set debug = false; in {{configurationFilePath}}",

@@ -341,7 +341,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
    * @param {SiteSettingsEntity} siteSettings
    */
   async getOrFindRbacs(siteSettings) {
-    const canIUseRbac = siteSettings?.canIUse("rbacs");
+    const canIUseRbac = typeof siteSettings?.canIUse === "function" ? siteSettings.canIUse("rbacs") : false;
     const rbacsCollection = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : new RbacsCollection([]);
     this.setState({ rbacs: rbacsCollection });
   }

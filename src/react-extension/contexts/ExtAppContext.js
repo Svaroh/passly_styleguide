@@ -106,11 +106,11 @@ class ExtAppContextProvider extends React.Component {
 
       loggedInUser: null,
       account: null, // The account
-      rbacs: null,
-      siteSettings: null,
-      userSettings: null,
+      rbacs: new RbacsCollection([]),
+      siteSettings: new SiteSettingsEntity({}),
+      userSettings: new UserSettings({}),
       extensionVersion: null, // The extension version
-      locale: null, // The locale
+      locale: "en-UK", // The locale
       isSessionLogoutByUser: false, // Is the session logout by the user
 
       setContext: (context) => {
@@ -210,11 +210,58 @@ class ExtAppContextProvider extends React.Component {
    * Get the current user info from background page and set it in the state
    */
   async getLoggedInUser() {
-    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
-    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
-    const rbacs = new RbacsCollection(rbacsDto);
-    this.setState({ loggedInUser, rbacs });
+    try {
+      const canIUseRbac = this.state.siteSettings?.canIUse ? this.state.siteSettings.canIUse("rbacs") : false;
+      const loggedInUserDto = await this.props.port.request("passbolt.users.find-logged-in-user");
+      let loggedInUser = loggedInUserDto || this.state.loggedInUser;
+      let rbacs = this.state.rbacs || new RbacsCollection([]);
+
+      if (canIUseRbac) {
+        try {
+          const rbacsDto = await this.rbacServiceWorkerService.findMe();
+          rbacs = new RbacsCollection(rbacsDto);
+        } catch (rbacError) {
+          console.warn("Could not load RBACs from service worker, falling back to cache", rbacError);
+        }
+      }
+
+      if (!loggedInUser) {
+        const account = await this.props.port.request("passbolt.account.get").catch(() => null);
+        if (account?.userId) {
+          loggedInUser = {
+            id: account.userId,
+            username: account.username || "",
+            profile: account.profile || {},
+            role: account.role || { name: "user" },
+          };
+        }
+      }
+
+      if (loggedInUser) {
+        this.setState({ loggedInUser, rbacs });
+      }
+    } catch (error) {
+      console.error("Could not load signed in user", error);
+      // Preserve existing user if already set, or fallback to account if available
+      if (!this.state.loggedInUser) {
+        try {
+          const account = await this.props.port.request("passbolt.account.get").catch(() => null);
+          if (account?.userId) {
+            this.setState({
+              loggedInUser: {
+                id: account.userId,
+                username: account.username || "",
+                profile: account.profile || {},
+                role: account.role || { name: "user" },
+              },
+              rbacs: this.state.rbacs || new RbacsCollection([]),
+            });
+          }
+        } catch {
+          // Offline fallback: ignore failure to retrieve account.
+        }
+      }
+    }
   }
 
   /**
@@ -222,9 +269,14 @@ class ExtAppContextProvider extends React.Component {
    * Using SiteSettingsEntity
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site-settings.find-and-update");
-    const siteSettings = new SiteSettingsEntity(settings);
-    this.setState({ siteSettings });
+    try {
+      const settings = await this.props.port.request("passbolt.site-settings.find-and-update");
+      const siteSettings = new SiteSettingsEntity(settings);
+      this.setState({ siteSettings });
+    } catch {
+      const siteSettings = new SiteSettingsEntity({});
+      this.setState({ siteSettings });
+    }
   }
 
   /**
@@ -290,17 +342,28 @@ class ExtAppContextProvider extends React.Component {
    * Using UserSettings
    */
   async getUserSettings() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({ userSettings });
+    try {
+      const storageData = await this.props.storage.local.get(["_passbolt_data"]);
+      const config = storageData?._passbolt_data?.config || {};
+      const userSettings = new UserSettings(config);
+      this.setState({ userSettings });
+    } catch (error) {
+      console.warn("Could not load user settings, fallback to default", error);
+      this.setState({ userSettings: this.state.userSettings || new UserSettings({}) });
+    }
   }
 
   /**
    * Init the locale
    */
   async initLocale() {
-    const { locale } = await this.props.port.request("passbolt.locale.get");
-    this.setState({ locale });
+    try {
+      const result = await this.props.port.request("passbolt.locale.get");
+      this.setState({ locale: result?.locale || "en-UK" });
+    } catch (error) {
+      console.warn("Could not load locale, fallback to en-UK", error);
+      this.setState({ locale: this.state.locale || "en-UK" });
+    }
   }
 
   /**
@@ -407,8 +470,10 @@ class ExtAppContextProvider extends React.Component {
     const displayExpiredSession = () => {
       if (!this.state.isSessionLogoutByUser) {
         callback();
-        // Flush resources to not leave sensitive data
-        this.setState({ resources: [] });
+        // Flush resources to not leave sensitive data only when online to preserve offline replica visibility
+        if (typeof navigator === "undefined" || navigator.onLine) {
+          this.setState({ resources: [] });
+        }
       }
     };
     this.props.port.on("passbolt.auth.after-logout", displayExpiredSession);
