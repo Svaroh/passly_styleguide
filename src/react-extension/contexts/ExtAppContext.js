@@ -257,7 +257,9 @@ class ExtAppContextProvider extends React.Component {
               rbacs: this.state.rbacs || new RbacsCollection([]),
             });
           }
-        } catch {}
+        } catch {
+          // Offline fallback: ignore failure to retrieve account.
+        }
       }
     }
   }

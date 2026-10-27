@@ -186,45 +186,6 @@ export class ExtQuickAccessContextProvider extends React.Component {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   bindCallbacks() {
     this.updateSearch = this.updateSearch.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);

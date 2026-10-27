@@ -1,4 +1,12 @@
-Passly Styleguide 6.1.5 fixes table layout and container stretching preventing white gaps, with responsive resize handling.
+Passly Styleguide 6.1.6 resolves linting rules, regex patterns, and duplicate class members.
+
+## [6.1.6] - 2026-10-27
+
+### Fixed
+- Fix ESLint `no-empty` error by properly handling offline account fallback in `ExtAppContext`
+- Remove duplicate `maxItems` getter in `OfflineSettingsEntity` resolving `no-dupe-class-members`
+- Optimize passkey credential and key patterns in `SecretDataV5PasskeyEntity` adhering to `regexp/prefer-w`
+- Fix code formatting and prettier alignments across extension components
 
 ## [6.1.5] - 2026-10-27
 

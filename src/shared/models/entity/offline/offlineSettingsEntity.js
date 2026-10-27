@@ -151,10 +151,6 @@ class OfflineSettingsEntity extends EntityV2 {
   get modifiedBy() {
     return this._props.modified_by || null;
   }
-
-  get maxItems() {
-    return typeof this._props.max_items === "number" ? this._props.max_items : 0;
-  }
 }
 
 export default OfflineSettingsEntity;
